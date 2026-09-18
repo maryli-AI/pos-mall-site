@@ -71,27 +71,20 @@ const CATEGORIES = [
     ]
   },
   {
-    id: 'receipt-printers',
-    name: 'Receipt Printers',
-    short: 'Receipt Printers',
+    id: 'printers',
+    name: 'Printers',
+    short: 'Printers',
     icon: 'printer',
-    desc: 'Thermal receipt, impact kitchen and portable printers from Epson, Star, Bixolon and more.',
+    desc: 'Receipt, label, portable, panel and OEM printer mechanisms — thermal and impact, desktop through industrial.',
     children: [
-      { id: 'thermal-receipt-printers', name: 'Thermal Receipt Printers' },
-      { id: 'impact-kitchen-printers', name: 'Dot Matrix / Kitchen Printers' },
-      { id: 'portable-printers', name: 'Portable & Mobile Printers' }
-    ]
-  },
-  {
-    id: 'barcode-label-printers',
-    name: 'Barcode Label Printers',
-    short: 'Label Printers',
-    icon: 'label',
-    desc: 'Desktop and industrial label, tag and shipping printers — Zebra, Honeywell, TSC.',
-    children: [
+      { id: 'desktop-receipt-printers', name: 'Desktop Receipt Printers' },
+      { id: 'impact-kitchen-printers', name: 'Impact & Kitchen Printers' },
+      { id: 'portable-bluetooth-printers', name: 'Portable & Bluetooth Printers' },
       { id: 'desktop-label-printers', name: 'Desktop Label Printers' },
       { id: 'industrial-label-printers', name: 'Industrial Label Printers' },
-      { id: 'mobile-label-printers', name: 'Mobile Label Printers' }
+      { id: 'mobile-label-printers', name: 'Mobile Label Printers' },
+      { id: 'panel-embedded-printers', name: 'Panel & Embedded Printers' },
+      { id: 'printer-mechanisms', name: 'Printer Mechanisms (OEM)' }
     ]
   },
   {

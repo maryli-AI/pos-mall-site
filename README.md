@@ -38,24 +38,27 @@ pos-mall/
 
 ```
 第一行   [Logo] ............ [搜索框] [Brands] [About] [Contact] [询价清单 (n)]
-第二行   POS Terminals · Receipt Printers · Barcode Label Printers ·
-         Barcode Scanners · Cash Drawers · Peripherals & Accessories ...... [All products]
+第二行   POS Terminals · Printers · Barcode Scanners ·
+         Cash Drawers · Peripherals & Accessories ...... [All products]
 ```
 
 第二行就是**类目平铺条**，内容完全由 `data.js` 的 `CATEGORIES` 数组顺序决定，新增/删除类目自动同步。
 每个类目悬停展开自己的子类目面板；没有子类目的类目不会出现下拉。
 
-当前共 **6 个类目**：
+当前共 **5 个类目**：
 
 | 类目 | 子类目 |
 |---|---|
 | POS Terminals | Windows / Android Terminals、All-in-One POS、Touchscreen Monitors |
-| Receipt Printers | Thermal Receipt、Dot Matrix / Kitchen、Portable & Mobile |
-| Barcode Label Printers | Desktop / Industrial / Mobile Label Printers |
+| **Printers** | Desktop Receipt、Impact & Kitchen、Portable & Bluetooth、Desktop / Industrial / Mobile Label、Panel & Embedded、Printer Mechanisms (OEM) |
 | Barcode Scanners | Handheld / Presentation / Wireless Scanners |
 | Cash Drawers | Printer-Driven、Standalone Drawers |
 | Peripherals & Accessories | Customer Displays、Keyboards & Scales、Cables & Adapters、Till Rolls & Ribbons、Mounts & Stands |
 
+> **`Printers` 由原来的 `Receipt Printers` + `Barcode Label Printers` 合并而成**（2026-09-18）。
+> 二级类目参考 `m.goojprt.com.cn` 的 product 分类，但**去掉了消费类影像打印机**
+> （Photo / Camera / Ai Printer 不属于 POS 硬件），并保留了原有的 Impact & Kitchen、Industrial / Mobile Label。
+>
 > 已按需求移除 **Kiosks & Self-Service、PDA & Tablets、POS Bundles & Systems** 三个类目。
 > 类目条在窄屏会自动收窄间距；宽度 < 1100px 时整条隐藏，改用汉堡菜单。
 
@@ -70,8 +73,8 @@ pos-mall/
   id: 'epson-tm-t88vi-m349a',      // 必填，唯一，产品页链接用 ?id=这个值
   name: 'Epson TM-T88VI Thermal Receipt Printer',  // 必填
   brand: 'epson',                  // 必填，取值见 data.js 的 BRANDS
-  category: 'receipt-printers',    // 必填，取值见 data.js 的 CATEGORIES
-  subcategory: 'thermal-receipt-printers',         // 可选，类目子项
+  category: 'printers',            // 必填，取值见 data.js 的 CATEGORIES
+  subcategory: 'desktop-receipt-printers',         // 可选，类目子项
   model: 'TM-T88VI',
   sku: 'M349A',
   condition: 'refurbished',        // refurbished | used-a | used-b | used-c
