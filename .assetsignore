@@ -1,0 +1,21 @@
+# Keep repository plumbing OUT of the deployed asset bundle.
+# Everything not listed here IS uploaded and served as a public file.
+#
+# Do NOT add "_headers" or "_redirects" here — Cloudflare needs them in the
+# asset bundle to apply cache rules / redirects.
+
+# git plumbing
+.git
+.gitattributes
+.gitignore
+
+# repo docs & tooling
+README.md
+wrangler.jsonc
+.assetsignore
+.github
+
+# OS / editor noise
+**/.DS_Store
+**/Thumbs.db
+**/desktop.ini

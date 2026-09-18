@@ -1,0 +1,25 @@
+{
+  // Cloudflare Workers configuration — static assets only, no server-side script.
+  // Docs: https://developers.cloudflare.com/workers/static-assets/
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // Worker name. Must match the project name you enter in the Cloudflare dashboard.
+  "name": "pos-mall-site",
+
+  // Set to today's date when you first create the Worker. Do not lower it later.
+  "compatibility_date": "2026-09-18",
+
+  // Adding a Wrangler config disables these by default unless you declare them.
+  // Keep them on so the *.workers.dev URL and per-version preview URLs still work.
+  "workers_dev": true,
+  "preview_urls": true,
+
+  "assets": {
+    // The site lives at the repository root, so the asset directory is ".".
+    // .assetsignore (same folder) keeps repo plumbing out of the uploaded bundle.
+    "directory": ".",
+
+    // Serve our own 404.html for unmatched routes (same behaviour as the old Pages setup).
+    "not_found_handling": "404-page"
+  }
+}
