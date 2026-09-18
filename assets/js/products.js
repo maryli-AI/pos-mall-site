@@ -13,7 +13,6 @@
  *   subcategory 字符串  可选，CATEGORIES 里对应的 children id（如 'all-in-one-pos'）
  *   model       字符串  型号，显示在标题下方
  *   sku         字符串  内部货号 / 制造商料号（如 'M349A'）
- *   condition   'refurbished' | 'used-a' | 'used-b' | 'used-c'   （见 data.js CONDITIONS）
  *   stock       'in-stock' | 'low-stock' | 'pre-order' | 'out-of-stock'
  *   price       数字或 null。null 表示显示 "Price on request"（询价制默认）
  *   qty         数字，可选。库存数量，仅作内部展示
@@ -61,7 +60,6 @@ const PRODUCTS = [
     subcategory: 'all-in-one-pos',
     model: 'VX520',
     sku: 'VX520-LAN',
-    condition: 'used-a',
     stock: 'in-stock',
     price: null,
     image: 'assets/img/products/secondhand-verifone-vx520-pos-terminal-lan-1.jpg',
@@ -74,7 +72,7 @@ const PRODUCTS = [
     description:
       'One of the most widely deployed countertop terminals in the field, and one of the easiest to keep running. Each unit is stripped, cleaned and functionally tested in our workshop: keypad, card reader, thermal printer and communications are all verified before dispatch.\n' +
       'The integrated thermal printer means a single device handles both payment capture and receipt printing, which keeps the counter footprint small and takes a separate printer off the shopping list. Ethernet connectivity suits fixed lanes on a wired network.\n' +
-      'Supplied with a tested power supply. Sold as a working unit — see the condition grade above for cosmetic expectations. No payment application or POS software is included; we supply hardware only.',
+      'Supplied with a tested power supply. Sold as a working unit. Cosmetic wear varies between individual units — ask us for photographs of current stock if appearance matters. No payment application or POS software is included; we supply hardware only.',
     specs: [
       { label: 'Product Family', value: 'Verifone VX520' },
       { label: 'Model Variant', value: 'LAN (Ethernet)' },
@@ -107,7 +105,6 @@ const PRODUCTS = [
     subcategory: 'all-in-one-pos',
     model: 'VX675',
     sku: 'VX675-3G',
-    condition: 'used-a',
     stock: 'in-stock',
     price: null,
     image: 'assets/img/products/used-handheld-pos-machine-3g-verifone-1.jpg',
@@ -119,7 +116,7 @@ const PRODUCTS = [
     shortDesc: 'Handheld terminal with a built-in thermal printer and 3G connectivity, for mobile lanes where running a cable is not practical.',
     description:
       'A handheld payment terminal with an integrated thermal printer, so receipts are produced at the point of sale rather than back at a fixed counter. 3G connectivity keeps the unit working anywhere with mobile coverage — useful for pop-up retail, markets, delivery handover and table-side payment.\n' +
-      'Every unit is stripped, cleaned and functionally tested before dispatch, covering the keypad, card reader, printer mechanism and radio. Cosmetic condition is graded above; units are supplied as working hardware without a payment application installed.\n' +
+      'Every unit is stripped, cleaned and functionally tested before dispatch, covering the keypad, card reader, printer mechanism and radio. Units are supplied as working hardware without a payment application installed, and cosmetic wear varies between individual units.\n' +
       'We supply hardware only — no payment software, no terminal management platform and no merchant services.',
     specs: [
       { label: 'Product Family', value: 'Verifone VX675' },
@@ -152,7 +149,6 @@ const PRODUCTS = [
     subcategory: 'all-in-one-pos',
     model: 'ME31',
     sku: 'ME31-GPRS',
-    condition: 'used-a',
     stock: 'in-stock',
     price: null,
     image: 'assets/img/products/used-me31-newland-gprs-terminal-point-1.jpg',

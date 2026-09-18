@@ -14,7 +14,7 @@ const SITE = {
   tagline: 'Wholesale Used & Refurbished POS Hardware',
   intro:
     'Supplier of professionally reconditioned point-of-sale hardware — terminals, receipt printers, ' +
-    'barcode equipment, cash drawers and peripherals. Tested, graded and ready to deploy. ' +
+    'barcode equipment, cash drawers and peripherals. Tested and ready to deploy. ' +
     'Hardware only. No software, no contracts.',
 
   email: 'sales@pos-mall.com',
@@ -44,9 +44,6 @@ const TRADE = {
     'This catalogue is quotation-based. Add the items you need to your enquiry list and our team will ' +
     'reply with trade pricing, stock confirmation and shipping costs.',
   warrantyNote: 'All refurbished units are covered by our standard 90-day parts-and-labour warranty unless stated otherwise.',
-  gradingNote:
-    'Grade A — fully refurbished, light or no cosmetic wear. Grade B — tested and working, visible cosmetic wear. ' +
-    'Grade C — budget / spares, extensive cosmetic wear, sold as tested-working only.',
   paymentNote: 'Payment by bank transfer or approved trade account. Pro-forma invoices available on request.',
   shippingNote: 'Worldwide shipping available. Pallet and container quantities quoted on request.'
 };
@@ -124,15 +121,6 @@ const CATEGORIES = [
       { id: 'mounts-stands', name: 'Mounts & Stands' }
     ]
   },
-];
-
-/* ---------------------------------------------------------------- 商品成色 */
-/* 二手 / 翻新 是本店主营，故成色是核心筛选维度。 */
-const CONDITIONS = [
-  { id: 'refurbished', name: 'Refurbished', short: 'Refurb', tone: 'green', desc: 'Professionally reconditioned, cleaned and fully tested.' },
-  { id: 'used-a', name: 'Used — Grade A', short: 'Grade A', tone: 'blue', desc: 'Tested working, light cosmetic wear.' },
-  { id: 'used-b', name: 'Used — Grade B', short: 'Grade B', tone: 'amber', desc: 'Tested working, visible cosmetic wear.' },
-  { id: 'used-c', name: 'Used — Grade C', short: 'Grade C', tone: 'slate', desc: 'Budget / spares, heavy cosmetic wear, tested working.' }
 ];
 
 /* ---------------------------------------------------------------- 库存状态 */

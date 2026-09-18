@@ -77,7 +77,6 @@ pos-mall/
   subcategory: 'desktop-receipt-printers',         // 可选，类目子项
   model: 'TM-T88VI',
   sku: 'M349A',
-  condition: 'refurbished',        // refurbished | used-a | used-b | used-c
   stock: 'in-stock',               // in-stock | low-stock | pre-order | out-of-stock
   price: null,                     // null = 显示 "Price on request"（询价制默认）
   qty: 12,                         // 可选，库存台数
@@ -294,4 +293,4 @@ Cloudflare 会把 `.html` 形式的地址跳转到无扩展名形式：
 - **类目导航**：参考 tills-direct.com —— POS 整机 / 打印机 / 扫描枪 / 现金抽屉 / 周边 的分类骨架。
 - **品牌与目录组织**：参考 owlposprinters.com —— 以品牌 × 品类双维度组织（其真实在售为
   Star Micronics / Epson / Zebra 三大主力，打印类占绝对多数）。
-- 两者均为「新机 + 翻新」，本站按需求**只保留二手与翻新**，并按 Refurbished / Grade A / B / C 四档成色区分。
+- 两者均为「新机 + 翻新」，本站按需求**只保留二手与翻新**，产品不做成色分级。

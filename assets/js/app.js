@@ -66,7 +66,6 @@ function subById(cat, subId) {
 }
 function brandById(id) { return BRANDS.find(b => b.id === id) || null; }
 function brandName(id) { const b = brandById(id); return b ? b.name : (id || ''); }
-function conditionById(id) { return CONDITIONS.find(c => c.id === id) || null; }
 function stockById(id) { return STOCKS.find(s => s.id === id) || null; }
 function priceText(p) {
   if (p.price === null || p.price === undefined || p.price === '') return 'Price on request';
@@ -273,7 +272,7 @@ function renderFooter() {
   mount.innerHTML =
     '<div class="footer-cta"><div class="shell footer-cta-inner">' +
       '<div><h3>Need trade pricing?</h3>' +
-      '<p>Tell us the models and quantities you need — we reply with stock confirmation, grading and shipping.</p></div>' +
+      '<p>Tell us the models and quantities you need — we reply with stock confirmation, pricing and shipping.</p></div>' +
       '<a class="btn btn-primary" href="enquiry.html">' + icon('mail', 17) + ' Request a quotation</a>' +
     '</div></div>' +
 
@@ -309,7 +308,6 @@ function renderFooter() {
         '<li><a href="catalog.html">Product catalogue</a></li>' +
         '<li><a href="enquiry.html">Request a quotation</a></li>' +
         '<li><a href="contact.html">Contact</a></li>' +
-        '<li><a href="about.html#grading">Condition grading</a></li>' +
         '<li><a href="about.html#warranty">Warranty &amp; returns</a></li>' +
       '</ul></div>' +
     '</div>' +
@@ -338,11 +336,6 @@ function renderBreadcrumbs(items) {
 }
 
 /* ------------------------------------------------------------ 产品卡片 */
-function conditionBadge(p) {
-  const c = conditionById(p.condition);
-  if (!c) return '';
-  return '<span class="badge badge-' + c.tone + '">' + esc(c.short) + '</span>';
-}
 function stockBadge(p) {
   const s = stockById(p.stock);
   if (!s) return '';
@@ -354,7 +347,6 @@ function productCard(p) {
   return '<article class="product-card">' +
     '<a class="pc-media" href="' + productUrl(p) + '" aria-label="' + esc(p.name) + '">' +
       '<img src="' + esc(imgOf(p)) + '" alt="' + esc(p.name) + '" loading="lazy">' +
-      '<span class="pc-badges">' + conditionBadge(p) + '</span>' +
     '</a>' +
     '<div class="pc-body">' +
       '<div class="pc-eyebrow"><span class="pc-brand">' + esc(brandName(p.brand)) + '</span>' +
@@ -414,15 +406,6 @@ function renderHome() {
       '</a>').join('');
   }
 
-  if ($('#home-conditions')) {
-    $('#home-conditions').innerHTML = CONDITIONS.map(c =>
-      '<div class="cond-card cond-' + c.tone + '">' +
-        '<span class="cond-badge badge badge-' + c.tone + '">' + esc(c.name) + '</span>' +
-        '<p>' + esc(c.desc) + '</p>' +
-        '<a class="link-arrow" href="catalog.html?condition=' + c.id + '">Browse ' + esc(c.short) + ' stock ' + icon('arrow', 13) + '</a>' +
-      '</div>').join('');
-  }
-
   /* 首屏数字随数据自动更新 */
   $$('[data-stat]').forEach(el => {
     const k = el.getAttribute('data-stat');
@@ -444,7 +427,6 @@ function renderCatalog() {
     cat: param('cat') || '',
     sub: param('sub') || '',
     brand: param('brand') || '',
-    condition: param('condition') || '',
     stock: param('stock') || '',
     sort: param('sort') || 'featured',
     page: parseInt(param('page') || '1', 10) || 1
@@ -478,13 +460,6 @@ function renderCatalog() {
           '</div></div>'
         : '') +
 
-      '<div class="filter-group"><span class="filter-title">Condition</span><div class="filter-opts">' +
-        '<label class="filter-opt' + (!state.condition ? ' is-active' : '') + '"><input type="radio" name="f-cond" value=""' + (!state.condition ? ' checked' : '') + '><span>Any condition</span></label>' +
-        CONDITIONS.map(c =>
-          '<label class="filter-opt' + (state.condition === c.id ? ' is-active' : '') + '"><input type="radio" name="f-cond" value="' + c.id + '"' + (state.condition === c.id ? ' checked' : '') + '><span>' + esc(c.name) + '</span><em>' + PRODUCTS.filter(p => p.condition === c.id).length + '</em></label>'
-        ).join('') +
-      '</div></div>' +
-
       '<div class="filter-group"><span class="filter-title">Brand</span><div class="filter-opts filter-opts-brand">' +
         '<label class="filter-opt' + (!state.brand ? ' is-active' : '') + '"><input type="radio" name="f-brand" value=""' + (!state.brand ? ' checked' : '') + '><span>All brands</span></label>' +
         BRANDS.filter(b => countInBrand(b.id) > 0).map(b =>
@@ -511,15 +486,12 @@ function renderCatalog() {
   if (state.cat) list = list.filter(p => p.category === state.cat);
   if (state.sub) list = list.filter(p => p.subcategory === state.sub);
   if (state.brand) list = list.filter(p => p.brand === state.brand);
-  if (state.condition) list = list.filter(p => p.condition === state.condition);
   if (state.stock) list = list.filter(p => p.stock === state.stock);
 
-  const condOrder = { refurbished: 0, 'used-a': 1, 'used-b': 2, 'used-c': 3 };
   const sorters = {
     featured: (a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0),
     name: (a, b) => a.name.localeCompare(b.name),
     brand: (a, b) => brandName(a.brand).localeCompare(brandName(b.brand)) || a.name.localeCompare(b.name),
-    condition: (a, b) => (condOrder[a.condition] ?? 9) - (condOrder[b.condition] ?? 9) || a.name.localeCompare(b.name),
     price: (a, b) => (a.price == null ? 1e12 : a.price) - (b.price == null ? 1e12 : b.price)
   };
   list.sort(sorters[state.sort] || sorters.featured);
@@ -542,7 +514,7 @@ function renderCatalog() {
       '<div class="results-tools">' +
         '<label class="sort-label" for="sort">Sort</label>' +
         '<select class="sort-select" id="sort">' +
-          ['featured|Featured first', 'name|Name A–Z', 'brand|Brand A–Z', 'condition|Best condition', 'price|Price low to high']
+          ['featured|Featured first', 'name|Name A–Z', 'brand|Brand A–Z', 'price|Price low to high']
             .map(o => { const v = o.split('|'); return '<option value="' + v[0] + '"' + (state.sort === v[0] ? ' selected' : '') + '>' + v[1] + '</option>'; }).join('') +
         '</select>' +
       '</div>';
@@ -577,7 +549,6 @@ function renderCatalog() {
   if (title) title.textContent = crumbLabel;
   document.title = crumbLabel +
     (state.brand ? ' — ' + brandName(state.brand) : '') +
-    (state.condition && conditionById(state.condition) ? ' (' + conditionById(state.condition).short + ')' : '') +
     ' | ' + SITE.name;
 
   /* --- 交互 --- */
@@ -590,7 +561,7 @@ function renderCatalog() {
 
   $$('#catalog-filters input[type=radio]').forEach(r => r.addEventListener('change', () => {
     const name = r.name;
-    const key = { 'f-cat': 'cat', 'f-sub': 'sub', 'f-cond': 'condition', 'f-brand': 'brand', 'f-stock': 'stock' }[name];
+    const key = { 'f-cat': 'cat', 'f-sub': 'sub', 'f-brand': 'brand', 'f-stock': 'stock' }[name];
     const patch = {}; patch[key] = r.value;
     if (key === 'cat') patch.sub = '';
     navigate(patch);
@@ -726,15 +697,13 @@ function renderProductPage() {
   ]);
 
   const gallery = (p.gallery && p.gallery.length) ? [imgOf(p)].concat(p.gallery) : [imgOf(p)];
-  const cond = conditionById(p.condition);
   const st = stockById(p.stock);
 
   const mount = $('#product-detail');
   if (!mount) return;
   mount.innerHTML =
     '<div class="pd-gallery">' +
-      '<div class="pd-main-media"><img id="pd-hero" src="' + esc(gallery[0]) + '" alt="' + esc(p.name) + '">' +
-        '<span class="pc-badges">' + conditionBadge(p) + '</span></div>' +
+      '<div class="pd-main-media"><img id="pd-hero" src="' + esc(gallery[0]) + '" alt="' + esc(p.name) + '"></div>' +
       (gallery.length > 1
         ? '<div class="pd-thumbs">' + gallery.map((g, i) =>
             '<button class="pd-thumb' + (i === 0 ? ' is-on' : '') + '" type="button" data-src="' + esc(g) + '"><img src="' + esc(g) + '" alt=""></button>').join('') + '</div>'
@@ -755,7 +724,6 @@ function renderProductPage() {
       '</div>' +
 
       '<div class="pd-badges">' +
-        (cond ? '<span class="badge badge-' + cond.tone + '">' + esc(cond.name) + '</span>' : '') +
         (st ? '<span class="badge badge-ghost badge-' + st.tone + '-text"><i class="dot dot-' + st.tone + '"></i>' + esc(st.name) + '</span>' : '') +
       '</div>' +
 
@@ -772,7 +740,6 @@ function renderProductPage() {
 
       '<ul class="pd-assure">' +
         '<li>' + icon('shield', 17) + '<span>' + esc(p.warranty || TRADE.warrantyNote) + '</span></li>' +
-        '<li>' + icon('wrench', 17) + '<span>' + esc(TRADE.gradingNote) + '</span></li>' +
         '<li>' + icon('truck', 17) + '<span>' + esc(TRADE.shippingNote) + '</span></li>' +
         '<li>' + icon('check', 17) + '<span>' + esc(TRADE.paymentNote) + '</span></li>' +
       '</ul>' +
@@ -840,10 +807,9 @@ function renderEnquiryPage() {
       const p = PRODUCTS.find(x => x.id === it.id);
       const name = p ? p.name : it.id;
       const meta = p ? [brandName(p.brand), p.model, p.sku ? 'Part ' + p.sku : ''].filter(Boolean).join(' · ') : 'Item not in catalogue';
-      const cond = p && conditionById(p.condition) ? '<span class="badge badge-' + conditionById(p.condition).tone + '">' + esc(conditionById(p.condition).short) + '</span>' : '';
       return '<tr data-id="' + esc(it.id) + '">' +
         '<td class="enq-prod"><div class="enq-media">' + (p ? '<img src="' + esc(imgOf(p)) + '" alt="">' : '<span class="enq-noimg">' + icon('bundle', 20) + '</span>') + '</div>' +
-          '<div><b>' + esc(name) + '</b><span class="enq-meta">' + esc(meta) + '</span>' + cond + '</div></td>' +
+          '<div><b>' + esc(name) + '</b><span class="enq-meta">' + esc(meta) + '</span></div></td>' +
         '<td class="enq-qty"><input class="input input-qty" type="number" min="1" value="' + (it.qty || 1) + '" data-qty="' + esc(it.id) + '"></td>' +
         '<td class="enq-del"><button class="icon-btn" type="button" data-remove="' + esc(it.id) + '" aria-label="Remove">' + icon('trash', 16) + '</button></td>' +
       '</tr>';
@@ -980,10 +946,4 @@ document.addEventListener('DOMContentLoaded', () => {
     default: break;
   }
 
-  /* 首页也给出「全部产品」快捷筛选入口 */
-  const quick = $('#home-quick-conditions');
-  if (quick) {
-    quick.innerHTML = CONDITIONS.map(c =>
-      '<a class="chip" href="catalog.html?condition=' + c.id + '">' + esc(c.name) + '</a>').join('');
-  }
 });
