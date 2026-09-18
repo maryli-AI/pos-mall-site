@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Sales Desk &amp; Trade Enquiries | POS Mall</title>
+<meta name="description" content="Contact the POS Mall sales desk for used and refurbished POS hardware, trade pricing, stock checks and technical compatibility questions.">
+<meta name="theme-color" content="#0b1e33">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="page" data-crumb="Contact">
+
+<div id="site-header"></div>
+<div id="breadcrumbs"></div>
+
+<div class="page-head">
+  <div class="shell">
+    <h1 class="page-title">Contact us</h1>
+    <p class="page-sub">
+      Trade pricing, stock checks, model compatibility — our sales desk handles it all. Tell us what you need
+      and we will come back with availability and a quote.
+    </p>
+  </div>
+</div>
+
+<div class="shell" style="padding-top:34px">
+  <div class="contact-grid">
+
+    <div>
+      <div class="enq-card">
+        <h2>Send us a message</h2>
+        <p class="form-hint" style="margin-bottom:20px">
+          For a formal quotation with multiple items, use the
+          <a href="enquiry.html" style="color:var(--blue);font-weight:600">enquiry list</a> instead — it captures
+          part numbers and quantities for you.
+        </p>
+
+        <form id="contact-form">
+          <div class="form-grid">
+            <div class="field">
+              <label for="c-name">Your name <span class="req">*</span></label>
+              <input class="input" id="c-name" name="name" required placeholder="Full name">
+            </div>
+            <div class="field">
+              <label for="c-company">Company</label>
+              <input class="input" id="c-company" name="company" placeholder="Business name">
+            </div>
+            <div class="field">
+              <label for="c-email">Email <span class="req">*</span></label>
+              <input class="input" id="c-email" name="email" type="email" required placeholder="name@company.com">
+            </div>
+            <div class="field">
+              <label for="c-phone">Phone</label>
+              <input class="input" id="c-phone" name="phone" placeholder="+1 555 000 0000">
+            </div>
+            <div class="field field-full">
+              <label for="c-subject">Subject</label>
+              <input class="input" id="c-subject" name="subject" placeholder="e.g. Availability of Epson TM-T88VI">
+            </div>
+            <div class="field field-full">
+              <label for="c-message">Message <span class="req">*</span></label>
+              <textarea class="input textarea" id="c-message" name="message" required placeholder="Models, quantities, delivery region and anything else we should know…"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary btn-lg" type="submit">Send message</button>
+            <span class="form-hint">Opens a pre-filled email to our sales desk.</span>
+          </div>
+        </form>
+
+        <div class="enq-done is-hidden" id="contact-done">
+          <b>Message prepared</b>
+          <p>Your email client should have opened. If it did not, write to us directly at
+            <a href="mailto:sales@pos-mall.com" style="color:#0b7c45;text-decoration:underline">sales@pos-mall.com</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="enq-card">
+        <h2 style="margin-bottom:20px">Sales desk</h2>
+        <div class="info-list">
+          <div class="info-row">
+            <span class="info-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            </span>
+            <div><b>Email</b><a href="mailto:sales@pos-mall.com">sales@pos-mall.com</a></div>
+          </div>
+          <div class="info-row">
+            <span class="info-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h3l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/></svg>
+            </span>
+            <div><b>Telephone</b><span>+1 (555) 010-2030</span></div>
+          </div>
+          <div class="info-row">
+            <span class="info-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+            </span>
+            <div><b>Opening hours</b><span>Mon – Fri, 09:00 – 18:00 (GMT-5)</span></div>
+          </div>
+          <div class="info-row">
+            <span class="info-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s6.5-6.2 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 14.8 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg>
+            </span>
+            <div><b>Trade counter</b><span>Unit 12, Trade Park Industrial Estate<br>Your City, ST 00000</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="aside-card aside-cta" style="margin-top:18px">
+        <h4>Ready to buy?</h4>
+        <p>Build an enquiry list of the models you need and we will reply with trade pricing, stock and freight.</p>
+        <a class="btn btn-primary btn-block" href="enquiry.html">Request a quotation</a>
+      </div>
+
+      <div class="aside-card" style="margin-top:18px">
+        <h4>Please note</h4>
+        <ul class="side-list">
+          <li>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+            <span>We supply hardware only — we cannot quote for POS software.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+            <span>We do not buy back or trade in used equipment.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+            <span>Model not listed? Send the part number — we source to order.</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

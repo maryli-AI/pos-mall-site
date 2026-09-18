@@ -1,0 +1,269 @@
+# pos-mall.com — 站点框架
+
+二手 / 翻新 POS 硬件独立站。**纯静态站点**（HTML + CSS + 原生 JS，无构建步骤、无依赖），
+可直接丢到任意静态托管（CloudStudio / Netlify / Vercel / Nginx / OSS+CDN）。
+
+定位：**只做硬件销售** —— 无软件、无回收/换新、无线上下单。购买路径为「加入询价清单 → 提交询价 → 线下报价」。
+
+---
+
+## 1. 目录结构
+
+```
+pos-mall/
+├── index.html          首页
+├── catalog.html        全部产品（筛选 / 排序 / 分页）
+├── category.html       类目页      ?cat=<category-id>&sub=<子类id>
+├── brands.html         品牌总览
+├── brand.html          品牌页      ?b=<brand-id>
+├── product.html        产品详情页  ?id=<product-id>
+├── enquiry.html        询价清单 + 询价表单
+├── about.html          关于我们（含成色分级 / 质保 / 购买流程）
+├── contact.html        联系我们
+├── 404.html            错误页
+└── assets/
+    ├── css/style.css   全部样式（含响应式）
+    ├── img/favicon.svg
+    └── js/
+        ├── data.js       ★ 站点配置 / 类目树 / 品牌库
+        ├── products.js   ★★ 产品数据（日常主要维护这个文件）
+        └── app.js        渲染与交互逻辑（一般不用改）
+```
+
+---
+
+## 2. 顶部导航：类目平铺
+
+顶部是**两行式页头**：
+
+```
+第一行   [Logo] ............ [搜索框] [Brands] [About] [Contact] [询价清单 (n)]
+第二行   POS Terminals · Receipt Printers · Barcode Label Printers ·
+         Barcode Scanners · Cash Drawers · Peripherals & Accessories ...... [All products]
+```
+
+第二行就是**类目平铺条**，内容完全由 `data.js` 的 `CATEGORIES` 数组顺序决定，新增/删除类目自动同步。
+每个类目悬停展开自己的子类目面板；没有子类目的类目不会出现下拉。
+
+当前共 **6 个类目**：
+
+| 类目 | 子类目 |
+|---|---|
+| POS Terminals | Windows / Android Terminals、All-in-One POS、Touchscreen Monitors |
+| Receipt Printers | Thermal Receipt、Dot Matrix / Kitchen、Portable & Mobile |
+| Barcode Label Printers | Desktop / Industrial / Mobile Label Printers |
+| Barcode Scanners | Handheld / Presentation / Wireless Scanners |
+| Cash Drawers | Printer-Driven、Standalone Drawers |
+| Peripherals & Accessories | Customer Displays、Keyboards & Scales、Cables & Adapters、Till Rolls & Ribbons、Mounts & Stands |
+
+> 已按需求移除 **Kiosks & Self-Service、PDA & Tablets、POS Bundles & Systems** 三个类目。
+> 类目条在窄屏会自动收窄间距；宽度 < 1100px 时整条隐藏，改用汉堡菜单。
+
+---
+
+## 3. 日常维护：怎么加产品
+
+只需要编辑 **`assets/js/products.js`**，在 `PRODUCTS` 数组里增删对象即可，其它文件都不用动。
+
+```js
+{
+  id: 'epson-tm-t88vi-m349a',      // 必填，唯一，产品页链接用 ?id=这个值
+  name: 'Epson TM-T88VI Thermal Receipt Printer',  // 必填
+  brand: 'epson',                  // 必填，取值见 data.js 的 BRANDS
+  category: 'receipt-printers',    // 必填，取值见 data.js 的 CATEGORIES
+  subcategory: 'thermal-receipt-printers',         // 可选，类目子项
+  model: 'TM-T88VI',
+  sku: 'M349A',
+  condition: 'refurbished',        // refurbished | used-a | used-b | used-c
+  stock: 'in-stock',               // in-stock | low-stock | pre-order | out-of-stock
+  price: null,                     // null = 显示 "Price on request"（询价制默认）
+  qty: 12,                         // 可选，库存台数
+  image: '',                       // 留空自动生成带品牌型号的占位图
+  gallery: [],                     // 附图
+  shortDesc: '列表页摘要，一两句话',
+  description: '详情页正文，\n 支持换行',
+  specs:    [{ label: 'Print Method', value: 'Direct Thermal' }],
+  features: ['新换打印头', '自动切刀'],
+  compat:   ['Square', 'Clover'],
+  boxContents: ['Printer', 'Power supply'],
+  warranty: '',                    // 留空用默认 90 天质保文案
+  featured: true,                  // 首页推荐位
+  tags: ['80mm', 'bestseller']
+}
+```
+
+> 目前有 **17 条示例占位产品**（原 22 条中，属于已移除的 Kiosks / PDA & Tablets / Bundles
+> 三个类目的 5 条已一并删除：`aures-odp-333-kiosk-printer`、`zebra-tc720l-mobile-computer`、
+> `elo-i-series-15-tablet`、`single-station-retail-bundle`、`multi-station-restaurant-bundle`。
+> 若以后仍想卖成套系统，可以加回 `bundles` 类目并把这两条 bundle 产品恢复。）
+
+> `price` 填了数字就显示价格；保持 `null` 则全站统一显示 "Price on request"。
+
+### 加图片
+把图片放到 `assets/img/`，然后 `image: 'assets/img/epson-t88vi.jpg'`（4:3 比例效果最好）。
+不填就自动生成占位图，方便先上线后补图。
+
+### 加品牌
+在 `data.js` 的 `BRANDS` 里追加 `{ id, name, origin, blurb }`，品牌页 / 页脚 / 筛选器自动同步。
+
+### 加 / 删类目
+在 `data.js` 的 `CATEGORIES` 里增删对象即可，**顶部平铺导航、首页类目卡、筛选器、页脚、移动端菜单全部自动同步**。
+注意：改类目 `id` 时要同步改 `products.js` 里对应产品的 `category` 值，否则该产品会失去类目归属。
+
+### 改站点信息
+`data.js` 顶部的 `SITE`（站名、邮箱、电话、地址、工作时间、货币）和 `TRADE`（质保、成色、付款、运输等全站文案）。
+
+---
+
+## 3.1 从阿里店铺迁入产品（自有店铺）
+
+本站产品可从自有阿里国际站店铺
+[mingood.en.alibaba.com](https://mingood.en.alibaba.com/)（Guangzhou Mingheng Technology Co., Ltd.）
+迁入。**关键：不要在英文站直接使用阿里的原始标题** —— 该店铺面向英文站的商品标题实为中文
+（如「二手vx680 gprs pos主板主板」），描述也是机翻风格。直接照搬只会做出中英混杂、SEO 很差的页面。
+
+**正确流程：规格与图片复用，标题与描述原创重写。**
+
+### 抓取要点（写脚本时容易踩的坑）
+
+| 事项 | 结论 |
+|---|---|
+| 商品列表 | 店铺分类页 `productgrouplist-<id>/<类目>.html`，`a[href*="product-detail"]` 即商品，注意**同一商品会出现两次**，需按 `alibaba_id` 去重 |
+| 商品 ID | 详情页 URL 尾部 `_<数字>.html` 中的数字 |
+| **主图选择器** | 必须用 **`img` 的祖先包含 `class*="main-image-tc"`**（即 `.main-image-tc-image-magnifier`）。**不要**用「页面第一张非装饰图」—— 详情页里混有「相关推荐」商品图，会导致图片归属错乱 |
+| 原图地址 | 缩略图 `.../kf/<hash>.jpg_960x960q80.jpg` 去掉尺寸后缀**不一定**存在；正确做法是从页面 HTML 里按 `<hash>` 匹配 `https://sc\d+.alicdn.com/kf/<hash>.<ext>`，取不到时退回 `_960x960` 版本 |
+| 规格属性 | 详情页正文 `核心行业属性` 与 `物流` 之间，为「标签/值」交替的行；标签已是英文，**值仍是中文**，需翻译 |
+| 登录 | 列表页与详情页均**无需登录**即可读取 |
+| 反爬 | 实测无反爬拦截，正常 UA + 5 秒等待即可 |
+
+### 图片处理规范
+
+- 输出目录 `assets/img/products/`
+- 命名：`<详情页URL的英文slug小写>-<序号>.jpg`
+- 统一等比缩到 **宽 ≤ 1000px**，转 JPEG（quality 84 / optimize / progressive）
+- 当前 12 张图合计约 **1.1MB**，单张 25–170KB
+- 白底/透明图自动合成白底，避免 PNG 透明区变黑
+
+### 已迁入的示范批次（3 款）
+
+| 产品 | 来源阿里 ID | 图片 |
+|---|---|---|
+| Refurbished Verifone VX520 Countertop POS Terminal | 62434696975 | 4 张 |
+| Refurbished Verifone VX675 3G Handheld POS Terminal | 62476068573 | 4 张 |
+| Refurbished Newland ME31 GPRS POS Terminal | 62571173373 | 3 张 |
+
+阿里原始报价记录在 `products.js` 每组上方的注释里（目前全站沿用询价制，未公开显示价格）。
+其余 17 款待迁入商品已抓取完毕，等待品牌归属确认后批量生成。
+
+---
+
+## 4. 本地预览
+
+```bash
+cd pos-mall
+python -m http.server 8080
+# 打开 http://localhost:8080
+```
+
+产品页示例：`product.html?id=epson-tm-t88vi-m349a`
+类目页示例：`category.html?cat=receipt-printers`
+
+---
+
+## 4.1 线上部署（Cloudflare Pages）
+
+**当前线上地址：https://pos-mall.com** （`www.pos-mall.com` 指向同一站点）
+
+| 项目 | 值 |
+|---|---|
+| 平台 | Cloudflare Pages |
+| 项目名 | `pos-mall` |
+| Pages 地址 | https://pos-mall.pages.dev |
+| 账号 ID | `b8d24227aa69a23ee9d8e45a3b2da619` |
+| 绑定方式 | 手动上传（Direct Upload，非 Git 集成） |
+| DNS | `pos-mall.com` / `www.pos-mall.com` 各一条 CNAME → `pos-mall.pages.dev`（Proxied） |
+
+### 改完产品后怎么重新发布
+
+改完 `assets/js/products.js` 后，重新上传一次即可：
+
+```bash
+# 需要 Cloudflare API Token（Account · Cloudflare Pages: Edit）
+export CLOUDFLARE_API_TOKEN=你的token
+export CLOUDFLARE_ACCOUNT_ID=b8d24227aa69a23ee9d8e45a3b2da619
+npx wrangler pages deploy ./pos-mall --project-name=pos-mall --branch=main
+```
+
+不想用命令行也可以：Cloudflare 后台 → Workers & Pages → `pos-mall` → **Create new deployment**
+→ 拖入整个 `pos-mall` 文件夹（或用仓库根目录的 `pos-mall-site.zip`，已排除 README）。
+
+> ⚠️ **每次发布后请验证一下**。项目是 Direct Upload，没有 Git 集成，所以不存在「忘了 push」的问题，但也**不会自动构建**。
+
+### 缓存策略（`_headers`）—— 重要
+
+Cloudflare Pages 默认给静态资源下发 `Cache-Control: max-age=14400`（**4 小时**）。
+这会导致**重新部署后，回访访客最长 4 小时仍看到旧的产品数据**（你自己浏览器也会）。
+
+仓库根目录的 **`_headers`** 文件已修正这一点：
+
+| 路径 | 策略 |
+|---|---|
+| `/assets/js/*` | `max-age=0, must-revalidate` —— 每次校验，ETag 命中就 304，很便宜 |
+| `/assets/css/*` | 同上 |
+| `/assets/img/*` | `max-age=3600` —— 图片按文件名缓存，内容不常变 |
+| `/*.html` | `max-age=0, must-revalidate` |
+
+> 改了 `_headers` 需要**重新部署**才生效。
+> 如果你访问线上发现内容没更新，先按 **Ctrl + Shift + R** 强制刷新 —— 这是浏览器本地缓存，不是部署失败。
+
+
+### 关于线上 URL 形式（重要）
+
+Cloudflare Pages 默认启用 **clean URL**：
+
+| 你请求的 | 实际返回 |
+|---|---|
+| `/catalog.html` | **308** 跳转到 `/catalog` |
+| `/product.html?id=xxx` | **308** 跳转到 `/product?id=xxx`（query 保留） |
+
+所以**线上两种写法都能用**，只是 `.html` 形式会多一跳、地址栏最终显示无扩展名形式。
+站内所有链接目前仍写成 `.html` 形式（为了本地 `file://` 和 `python -m http.server` 能直接预览），
+跳转由 Cloudflare 自动处理，功能不受影响。
+
+如果要彻底消掉这一跳，把站内链接改成无扩展名形式即可，但**代价是本地预览必须走一个支持 clean URL 的服务器**，不能再用简单的 `python -m http.server`。
+
+---
+
+## 5. 上线前需要替换的地方
+
+| 位置 | 说明 |
+|---|---|
+| `data.js` → `SITE` | 邮箱 `sales@pos-mall.com`、电话 `+1 (555) 010-2030`、地址、工作时间都是占位值 |
+| 页脚 / 关于页 | 公司实体信息、条款与隐私政策链接目前指向 about.html，需替换为正式页面 |
+| 询价表单 | 目前提交后调用 `mailto:` 打开本地邮件客户端。若要有真实后端，把 `app.js` 里 `renderEnquiryPage()` 的提交分支改成 `fetch('/api/enquiry', …)` 即可 |
+| `404.html` | Cloudflare Pages 会自动使用根目录的 `404.html` 作为错误页，无需额外配置 |
+| 站点地图 / robots.txt | 尚未创建，正式推广前建议补上 |
+
+> 提醒：`pos-mall.com` 的 apex 和 www 目前**同时可访问同一站点**。若在意 SEO 重复内容，
+> 建议二选一（推荐保留 apex）并把另一个做 301 跳转 —— 这需要 Cloudflare 的
+> Redirect Rules（Zone 级权限），或改用一条 `_redirects` 规则。
+
+
+---
+
+## 6. 说明：为什么没有购物车 / 结算
+
+按需求站点**不做线上下单**，所以用 **Enquiry list（询价清单）** 替代购物车：
+
+- 产品卡 / 详情页的 **Enquire** 按钮把商品写入浏览器 `localStorage`（键名 `posmall.enquiry.v1`）。
+- 询价页可调整数量、删除条目，填写公司信息后一键生成询价邮件。
+- 全程无价格结算、无支付入口，符合「只做硬件销售 + 报价制」的定位。
+
+---
+
+## 7. 信息架构参考来源
+
+- **类目导航**：参考 tills-direct.com —— POS 整机 / 打印机 / 扫描枪 / 现金抽屉 / 周边 的分类骨架。
+- **品牌与目录组织**：参考 owlposprinters.com —— 以品牌 × 品类双维度组织（其真实在售为
+  Star Micronics / Epson / Zebra 三大主力，打印类占绝对多数）。
+- 两者均为「新机 + 翻新」，本站按需求**只保留二手与翻新**，并按 Refurbished / Grade A / B / C 四档成色区分。

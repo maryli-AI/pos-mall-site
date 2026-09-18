@@ -1,0 +1,21 @@
+# Cloudflare Pages 缓存策略
+# ---------------------------------------------------------------------------
+# 默认情况下 Pages 给静态资源下发 max-age=14400（4 小时），
+# 这会导致「重新部署后，回访用户最长 4 小时仍看到旧的产品数据」。
+# 本站产品会持续更新，所以 JS / CSS 一律改为每次向服务器校验（304 很便宜）。
+#
+# 修改后需重新部署才生效。
+
+/assets/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# 图片按文件名缓存，内容不常变，给 1 小时
+/assets/img/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# HTML 本身始终校验
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
