@@ -1,0 +1,12 @@
+# 统一换行符，避免 Windows 上提交出 CRLF
+# Cloudflare Pages 在 Linux 环境构建，LF 更干净
+* text=auto eol=lf
+
+# 二进制文件不做换行符转换
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.svg text eol=lf
