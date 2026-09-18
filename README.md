@@ -95,19 +95,30 @@ pos-mall/
 }
 ```
 
-> 目前有 **17 条示例占位产品**（原 22 条中，属于已移除的 Kiosks / PDA & Tablets / Bundles
-> 三个类目的 5 条已一并删除：`aures-odp-333-kiosk-printer`、`zebra-tc720l-mobile-computer`、
-> `elo-i-series-15-tablet`、`single-station-retail-bundle`、`multi-station-restaurant-bundle`。
-> 若以后仍想卖成套系统，可以加回 `bundles` 类目并把这两条 bundle 产品恢复。）
+> **当前只有 3 条真实产品**（Verifone VX520 / VX675、Newland ME31，2026-09-18 从阿里店铺迁入，带实拍图）。
+> 其余 17 条用于跑通页面结构的**示例占位数据已于同日全部移除** —— 空类目页会显示
+> "No stock listed in this category yet" + 询价入口，不会出现空白页。
+>
+> 如需找回历史数据：`git log` 找到移除前的提交，再执行
+> `git checkout <commit> -- assets/js/products.js`。
+> 另有一份备份在 `.workbuddy/memory/BACKUP-2026-09-18-products.js`。
 
 > `price` 填了数字就显示价格；保持 `null` 则全站统一显示 "Price on request"。
 
 ### 加图片
-把图片放到 `assets/img/`，然后 `image: 'assets/img/epson-t88vi.jpg'`（4:3 比例效果最好）。
+把图片放到 `assets/img/products/`，然后 `image: 'assets/img/products/verifone-vx520-1.jpg'`（4:3 比例效果最好）。
 不填就自动生成占位图，方便先上线后补图。
 
 ### 加品牌
+
 在 `data.js` 的 `BRANDS` 里追加 `{ id, name, origin, blurb }`，品牌页 / 页脚 / 筛选器自动同步。
+
+> **没有产品引用的品牌不会显示为品牌卡片** —— 它们只会出现在品牌页底部
+> 「Also sourced on request」那一行里（读作"可代订"），也不进导航下拉、首页品牌条和目录页筛选器
+> （这三处都按"有库存"过滤）。**所以先加品牌、后加产品是安全的**，不会产生空卡片或空筛选器。
+>
+> ⚠️ **`BRANDS` 数组最后一项没有尾逗号**，追加时必须给上一项补上逗号，
+> 否则整站 JS 语法错误、所有页面变空白。
 
 ### 加 / 删类目
 在 `data.js` 的 `CATEGORIES` 里增删对象即可，**顶部平铺导航、首页类目卡、筛选器、页脚、移动端菜单全部自动同步**。
@@ -156,7 +167,9 @@ pos-mall/
 | Refurbished Newland ME31 GPRS POS Terminal | 62571173373 | 3 张 |
 
 阿里原始报价记录在 `products.js` 每组上方的注释里（目前全站沿用询价制，未公开显示价格）。
-其余 17 款待迁入商品已抓取完毕，等待品牌归属确认后批量生成。
+
+> 原先计划的「17 款批量迁入」**已于 2026-09-18 作废** —— 改由店主自行确认上架哪些产品后，
+> 再逐个迁入（可继续用本节的方法：抓规格 + 复用图片 + 重写英文标题描述）。
 
 ---
 
@@ -168,8 +181,8 @@ python -m http.server 8080
 # 打开 http://localhost:8080
 ```
 
-产品页示例：`product.html?id=epson-tm-t88vi-m349a`
-类目页示例：`category.html?cat=receipt-printers`
+产品页示例：`product.html?id=verifone-vx520-countertop-terminal`
+类目页示例：`category.html?cat=pos-terminals`
 
 ---
 
