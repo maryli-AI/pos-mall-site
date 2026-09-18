@@ -170,41 +170,52 @@ python -m http.server 8080
 
 ---
 
-## 4.1 线上部署（Cloudflare Pages）
+## 4.1 线上部署（Cloudflare Workers · Git 自动部署）
 
 **当前线上地址：https://pos-mall.com** （`www.pos-mall.com` 指向同一站点）
 
 | 项目 | 值 |
 |---|---|
-| 平台 | Cloudflare Pages |
-| 项目名 | `pos-mall` |
-| Pages 地址 | https://pos-mall.pages.dev |
-| 账号 ID | `b8d24227aa69a23ee9d8e45a3b2da619` |
-| 绑定方式 | 手动上传（Direct Upload，非 Git 集成） |
-| DNS | `pos-mall.com` / `www.pos-mall.com` 各一条 CNAME → `pos-mall.pages.dev`（Proxied） |
+| 平台 | **Cloudflare Workers（静态资源模式）** |
+| Worker 名 | `pos-mall-site` |
+| 预览地址 | https://pos-mall-site.marylipos.workers.dev |
+| Git 仓库 | https://github.com/maryli-AI/pos-mall-site （`main` 分支） |
+| 配置文件 | `wrangler.jsonc` + `.assetsignore`（均在仓库根目录） |
+| 绑定方式 | **Git 集成 → push 即自动构建发布** |
+| 自定义域名 | `pos-mall.com` / `www.pos-mall.com`，在 Worker 的 Settings → Domains & Routes 里管理 |
 
-### 改完产品后怎么重新发布
+### 改完产品后怎么发布（日常流程）
 
-改完 `assets/js/products.js` 后，重新上传一次即可：
+**不需要任何 Cloudflare API Token，也不需要命令行。** 三步：
 
-```bash
-# 需要 Cloudflare API Token（Account · Cloudflare Pages: Edit）
-export CLOUDFLARE_API_TOKEN=你的token
-export CLOUDFLARE_ACCOUNT_ID=b8d24227aa69a23ee9d8e45a3b2da619
-npx wrangler pages deploy ./pos-mall --project-name=pos-mall --branch=main
-```
+1. 改 `assets/js/products.js`（或任何文件）
+2. 打开 **GitHub Desktop** → 勾选改动 → 写一句说明 → 点 **Commit to main**
+3. 点顶部的 **Push origin**
 
-不想用命令行也可以：Cloudflare 后台 → Workers & Pages → `pos-mall` → **Create new deployment**
-→ 拖入整个 `pos-mall` 文件夹（或用仓库根目录的 `pos-mall-site.zip`，已排除 README）。
+Cloudflare 检测到 push 后自动构建，**1~2 分钟后 https://pos-mall.com 就更新了**。
+构建日志：Cloudflare 后台 → Workers & Pages → `pos-mall-site` → Deployments。
 
-> ⚠️ **每次发布后请验证一下**。项目是 Direct Upload，没有 Git 集成，所以不存在「忘了 push」的问题，但也**不会自动构建**。
+### 为什么是 Workers 而不是 Pages
+
+2026 年 9 月起，Cloudflare 后台的 **Create application** 流程**只会创建 Worker** —— Pages 已无法新建
+（官方社区有同样报告）。Pages 并未被官方宣布停用，但已"不推荐用于新项目"。
+Workers 静态资源模式支持我们需要的全部能力：`_headers`、自定义 404、自定义域名，且**静态请求免费**。
+
+两个配置文件的作用：
+
+| 文件 | 作用 |
+|---|---|
+| `wrangler.jsonc` | Worker 名字、`assets.directory`（站点根目录）、404 处理方式 |
+| `.assetsignore` | 指定哪些文件**不要**上传（`.git`、`README.md`、配置文件本身…） |
+
+> ⚠️ **`.assetsignore` 里不要排除 `_headers`**，否则缓存规则会失效。
+>
+> ⚠️ **`wrangler.jsonc` 里 `workers_dev` 和 `preview_urls` 必须显式写 `true`** ——
+> 一旦仓库里存在 wrangler 配置文件，这两项**默认会被关闭**，`.workers.dev` 地址会变成 404，且不报错。
 
 ### 缓存策略（`_headers`）—— 重要
 
-Cloudflare Pages 默认给静态资源下发 `Cache-Control: max-age=14400`（**4 小时**）。
-这会导致**重新部署后，回访访客最长 4 小时仍看到旧的产品数据**（你自己浏览器也会）。
-
-仓库根目录的 **`_headers`** 文件已修正这一点：
+仓库根目录的 **`_headers`** 文件控制静态资源的缓存：
 
 | 路径 | 策略 |
 |---|---|
@@ -213,18 +224,19 @@ Cloudflare Pages 默认给静态资源下发 `Cache-Control: max-age=14400`（**
 | `/assets/img/*` | `max-age=3600` —— 图片按文件名缓存，内容不常变 |
 | `/*.html` | `max-age=0, must-revalidate` |
 
-> 改了 `_headers` 需要**重新部署**才生效。
-> 如果你访问线上发现内容没更新，先按 **Ctrl + Shift + R** 强制刷新 —— 这是浏览器本地缓存，不是部署失败。
+> 改了 `_headers` 需要**重新 push** 才生效。
+> 如果访问线上发现内容没更新，先按 **Ctrl + Shift + R** 强制刷新 —— 这通常是浏览器本地缓存，
+> 不是部署失败。（历史遗留的旧缓存最长 4 小时会自行过期。）
 
 
 ### 关于线上 URL 形式（重要）
 
-Cloudflare Pages 默认启用 **clean URL**：
+Cloudflare 会把 `.html` 形式的地址跳转到无扩展名形式：
 
 | 你请求的 | 实际返回 |
 |---|---|
-| `/catalog.html` | **308** 跳转到 `/catalog` |
-| `/product.html?id=xxx` | **308** 跳转到 `/product?id=xxx`（query 保留） |
+| `/catalog.html` | **307** 跳转到 `/catalog` |
+| `/product.html?id=xxx` | **307** 跳转到 `/product?id=xxx`（query 保留） |
 
 所以**线上两种写法都能用**，只是 `.html` 形式会多一跳、地址栏最终显示无扩展名形式。
 站内所有链接目前仍写成 `.html` 形式（为了本地 `file://` 和 `python -m http.server` 能直接预览），
@@ -241,7 +253,7 @@ Cloudflare Pages 默认启用 **clean URL**：
 | `data.js` → `SITE` | 邮箱 `sales@pos-mall.com`、电话 `+1 (555) 010-2030`、地址、工作时间都是占位值 |
 | 页脚 / 关于页 | 公司实体信息、条款与隐私政策链接目前指向 about.html，需替换为正式页面 |
 | 询价表单 | 目前提交后调用 `mailto:` 打开本地邮件客户端。若要有真实后端，把 `app.js` 里 `renderEnquiryPage()` 的提交分支改成 `fetch('/api/enquiry', …)` 即可 |
-| `404.html` | Cloudflare Pages 会自动使用根目录的 `404.html` 作为错误页，无需额外配置 |
+| `404.html` | 不用手动配置 —— `wrangler.jsonc` 里的 `assets.not_found_handling: "404-page"` 已指定用它作为错误页 |
 | 站点地图 / robots.txt | 尚未创建，正式推广前建议补上 |
 
 > 提醒：`pos-mall.com` 的 apex 和 www 目前**同时可访问同一站点**。若在意 SEO 重复内容，
