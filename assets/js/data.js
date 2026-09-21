@@ -18,10 +18,14 @@ const SITE = {
     'Hardware only. No software, no contracts.',
 
   email: 'sales@pos-mall.com',
-  phone: '',                          // 留空则整站不显示电话（原值曾是占位假号码）
   whatsapp: '+86 189 2626 8820',         // 带国家码。非数字字符会被自动剥离后生成 wa.me 链接
   hours: 'Mon – Fri, 09:00 – 18:00 (GMT+8)',
-  addressLine: '',                       // 留空则整站不显示地址（原值是模板占位）
+
+  /* 电话与地址：店主 2026-09-21 明确决定**不公开** —— 保持空值，站上就不会出现。
+     留空是刻意的，不是待办：页头、页脚、浮动联系窗都会自动跳过这两个字段。
+     联系方式只走 WhatsApp + Email 两条线。 */
+  phone: '',
+  addressLine: '',
   addressCity: '',
 
   currency: 'USD',
