@@ -42,6 +42,8 @@ pos-mall/
 ```
 
 第二行就是**类目平铺条**，内容完全由 `data.js` 的 `CATEGORIES` 数组顺序决定，新增/删除类目自动同步。
+
+> 页头**原本最上方还有一条深色信息条**（电话 / 邮箱 / 工作时间），已于 2026-09-21 **整条移除**，联系方式改由右下角的浮动联系窗承载 —— 见第 2.1 节。
 每个类目悬停展开自己的子类目面板；没有子类目的类目不会出现下拉。
 
 当前共 **4 个类目**：
@@ -64,6 +66,26 @@ pos-mall/
 > 移除 `Cash Drawers`，并把 `Printer Mechanisms` 从 Printers 挪到 Accessories。
 > 子类目多于 6 项时下拉自动变两栏。
 > 类目条在窄屏会自动收窄间距；宽度 < 1100px 时整条隐藏，改用汉堡菜单。
+
+---
+
+## 2.1 浮动联系窗（右下角）
+
+全站右下角固定一个圆形按钮，点击展开联系方式卡。由 `app.js` 的 `renderContactDock()` 生成，
+样式在 `style.css` 的 `.contact-dock` 区块。
+
+| 项 | 说明 |
+|---|---|
+| 渠道 | WhatsApp（`SITE.whatsapp` 有值才出现）+ Email（始终出现） |
+| 内容 | 页脚显示 `SITE.hours`，并留一个指向 `contact.html` 的入口 |
+| 依赖 | **无第三方服务** —— 纯 JS/CSS。没有外部脚本、没有 cookie、无需同意弹窗 |
+| 交互 | 点按钮开合；`Esc` 或点击别处关闭；按钮带 `aria-expanded` / `aria-controls` |
+| 占位 | 固定定位 `z-index: 80`，在粘性页头（90）之下、页面内容之上 |
+
+> ⚠️ 文案刻意写「Replies within 1 business day」而不是「Online now」——
+> 因为**没有真人在线值守**。店主在 GMT+8，客户多在美洲/非洲，时差 8~13 小时，
+> 一个常年「离线」的在线客服比不提供更伤信任。
+> 若日后接入真人在线客服（如 Tawk.to），再把文案和形态改掉，并记得加隐私政策说明。
 
 ---
 
@@ -127,7 +149,8 @@ pos-mall/
 注意：改类目 `id` 时要同步改 `products.js` 里对应产品的 `category` 值，否则该产品会失去类目归属。
 
 ### 改站点信息
-`data.js` 顶部的 `SITE`（站名、邮箱、电话、地址、工作时间、货币）和 `TRADE`（质保、成色、付款、运输等全站文案）。
+`data.js` 顶部的 `SITE`（站名、邮箱、电话、WhatsApp、地址、工作时间、货币）和 `TRADE`（质保、付款、运输等全站文案）。
+> `phone` / `whatsapp` / `addressLine` / `addressCity` **留空即不渲染** —— 页头、页脚、浮动联系窗都会自动跳过。
 
 ---
 
@@ -268,7 +291,7 @@ Cloudflare 会把 `.html` 形式的地址跳转到无扩展名形式：
 
 | 位置 | 说明 |
 |---|---|
-| `data.js` → `SITE` | 邮箱 `sales@pos-mall.com`、电话 `+1 (555) 010-2030`、地址、工作时间都是占位值 |
+| `data.js` → `SITE` | 邮箱 `sales@pos-mall.com` 是真实可用的；**电话 / WhatsApp / 地址目前为空**（原值是模板占位，已移除），需要时填上即自动出现 |
 | 页脚 / 关于页 | 公司实体信息、条款与隐私政策链接目前指向 about.html，需替换为正式页面 |
 | 询价表单 | 目前提交后调用 `mailto:` 打开本地邮件客户端。若要有真实后端，把 `app.js` 里 `renderEnquiryPage()` 的提交分支改成 `fetch('/api/enquiry', …)` 即可 |
 | `404.html` | 不用手动配置 —— `wrangler.jsonc` 里的 `assets.not_found_handling: "404-page"` 已指定用它作为错误页 |

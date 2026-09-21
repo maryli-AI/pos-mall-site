@@ -25,6 +25,7 @@ const ICONS = {
   bundle: '<path d="M3.5 7.5 12 3.5l8.5 4v9l-8.5 4-8.5-4z"/><path d="M3.5 7.5 12 11.5l8.5-4M12 11.5v9"/>',
   search: '<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/>',
   mail: '<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  chat: '<path d="M6 4.5h12a2.5 2.5 0 0 1 2.5 2.5v7a2.5 2.5 0 0 1-2.5 2.5h-6.5L6 20.5v-4a2.5 2.5 0 0 1-2.5-2.5V7A2.5 2.5 0 0 1 6 4.5z"/>',
   phone: '<path d="M6.5 3.5h3l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/>',
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   pin: '<path d="M12 21s6.5-6.2 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 14.8 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/>',
@@ -79,6 +80,15 @@ function categoryUrl(id, sub) {
   return 'category.html?cat=' + encodeURIComponent(id) + (sub ? '&sub=' + encodeURIComponent(sub) : '');
 }
 function brandUrl(id) { return 'brand.html?b=' + encodeURIComponent(id); }
+
+/* WhatsApp 深链：把 SITE.whatsapp 里的非数字字符去掉，得到 wa.me 需要的纯号码。
+   返回空字符串表示未配置 —— 调用方据此决定是否渲染入口。 */
+function whatsappUrl() {
+  const n = String(SITE.whatsapp || '').replace(/[^\d]/g, '');
+  if (!n) return '';
+  return 'https://wa.me/' + n + '?text=' +
+    encodeURIComponent('Hello, I would like a quotation for POS hardware.');
+}
 function countInCategory(catId, subId) {
   return PRODUCTS.filter(p => p.category === catId && (!subId || p.subcategory === subId)).length;
 }
@@ -195,15 +205,6 @@ function renderHeader() {
     '</li>';
 
   mount.innerHTML =
-    '<div class="topbar"><div class="shell topbar-inner">' +
-      '<div class="topbar-left">' +
-        '<a class="topbar-item" href="' + (SITE.phone ? 'tel:' + esc(SITE.phone.replace(/[^+\d]/g, '')) : 'contact.html') + '">' + icon('phone', 15) + '<span>' + esc(SITE.phone) + '</span></a>' +
-        '<a class="topbar-item" href="mailto:' + esc(SITE.email) + '">' + icon('mail', 15) + '<span>' + esc(SITE.email) + '</span></a>' +
-        '<span class="topbar-item topbar-hide-sm">' + icon('clock', 15) + '<span>' + esc(SITE.hours) + '</span></span>' +
-      '</div>' +
-      '<div class="topbar-right"><span class="topbar-tag">' + esc(TRADE.paymentNote.split('.')[0]) + '</span></div>' +
-    '</div></div>' +
-
     '<header class="site-header">' +
 
       '<div class="shell header-main">' +
@@ -286,9 +287,11 @@ function renderFooter() {
         '<p>' + esc(SITE.footerNote) + '</p>' +
         '<ul class="footer-contact">' +
           '<li>' + icon('mail', 15) + '<a href="mailto:' + esc(SITE.email) + '">' + esc(SITE.email) + '</a></li>' +
-          '<li>' + icon('phone', 15) + '<span>' + esc(SITE.phone) + '</span></li>' +
-          (SITE.whatsapp ? '<li>' + icon('phone', 15) + '<span>WhatsApp ' + esc(SITE.whatsapp) + '</span></li>' : '') +
-          '<li>' + icon('pin', 15) + '<span>' + esc(SITE.addressLine) + ', ' + esc(SITE.addressCity) + '</span></li>' +
+          (SITE.phone ? '<li>' + icon('phone', 15) + '<span>' + esc(SITE.phone) + '</span></li>' : '') +
+          (whatsappUrl() ? '<li>' + icon('chat', 15) + '<a href="' + whatsappUrl() + '" target="_blank" rel="noopener">WhatsApp ' + esc(SITE.whatsapp) + '</a></li>' : '') +
+          ((SITE.addressLine || SITE.addressCity)
+            ? '<li>' + icon('pin', 15) + '<span>' + esc([SITE.addressLine, SITE.addressCity].filter(Boolean).join(', ')) + '</span></li>'
+            : '') +
           '<li>' + icon('clock', 15) + '<span>' + esc(SITE.hours) + '</span></li>' +
         '</ul>' +
       '</div>' +
@@ -927,11 +930,58 @@ function bindGlobal() {
   });
 }
 
+/* ------------------------------------------- 浮动联系方式（右下角） */
+/* 取代原先页头最上方的深色信息条：全站右下角固定一个圆形按钮，
+   点击展开联系方式卡。不依赖任何第三方服务，没有 cookie，没有外部脚本。 */
+function renderContactDock() {
+  const wa = whatsappUrl();
+  const mount = document.createElement('div');
+  mount.className = 'contact-dock';
+  mount.id = 'contact-dock';
+  mount.innerHTML =
+    '<div class="dock-panel" id="dock-panel">' +
+      '<div class="dock-head">' +
+        '<span class="dock-head-icon">' + icon('chat', 17) + '</span>' +
+        '<span class="dock-head-text"><b>Talk to our sales desk</b>' +
+          '<span>Replies within 1 business day</span></span>' +
+      '</div>' +
+      '<div class="dock-links">' +
+        (wa
+          ? '<a class="dock-link" href="' + wa + '" target="_blank" rel="noopener">' +
+              icon('chat', 16) + '<span>WhatsApp</span><em>Chat now</em></a>'
+          : '') +
+        '<a class="dock-link" href="mailto:' + esc(SITE.email) + '">' +
+          icon('mail', 16) + '<span>Email us</span><em>' + esc(SITE.email) + '</em></a>' +
+      '</div>' +
+      '<div class="dock-foot">' +
+        '<p>' + esc(SITE.hours) + '</p>' +
+        '<a href="contact.html">Enquiry form, trade accounts and freight ' + icon('arrow', 12) + '</a>' +
+      '</div>' +
+    '</div>' +
+    '<button class="dock-fab" type="button" id="dock-fab" aria-expanded="false" aria-controls="dock-panel" aria-label="Contact us">' +
+      '<span class="dock-fab-open">' + icon('chat', 22) + '</span>' +
+      '<span class="dock-fab-close">' + icon('close', 22) + '</span>' +
+    '</button>';
+  document.body.appendChild(mount);
+
+  const fab = mount.querySelector('#dock-fab');
+  const setOpen = on => {
+    mount.classList.toggle('is-open', on);
+    fab.setAttribute('aria-expanded', on ? 'true' : 'false');
+  };
+  fab.addEventListener('click', () => setOpen(!mount.classList.contains('is-open')));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+  document.addEventListener('click', e => {
+    if (mount.classList.contains('is-open') && !mount.contains(e.target)) setOpen(false);
+  });
+}
+
 /* ---------------------------------------------------------------- 启动 */
 document.addEventListener('DOMContentLoaded', () => {
   renderHeader();
   renderFooter();
   bindGlobal();
+  renderContactDock();
   syncEnquiryBadge();
 
   const page = document.body.getAttribute('data-page');

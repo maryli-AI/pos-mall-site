@@ -18,11 +18,11 @@ const SITE = {
     'Hardware only. No software, no contracts.',
 
   email: 'sales@pos-mall.com',
-  phone: '+1 (555) 010-2030',
-  whatsapp: '',                          // 留空则不显示
-  hours: 'Mon – Fri, 09:00 – 18:00 (GMT-5)',
-  addressLine: 'Unit 12, Trade Park Industrial Estate',
-  addressCity: 'Your City, ST 00000',
+  phone: '',                          // 留空则整站不显示电话（原值曾是占位假号码）
+  whatsapp: '',                          // 例：'+8613800138000'；填了才会出现 WhatsApp 入口
+  hours: 'Mon – Fri, 09:00 – 18:00 (GMT+8)',
+  addressLine: '',                       // 留空则整站不显示地址（原值是模板占位）
+  addressCity: '',
 
   currency: 'USD',
   priceDisplayDefault: 'request',        // 'request' = 统一显示 Price on request
