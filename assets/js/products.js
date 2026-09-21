@@ -10,7 +10,7 @@
  *   name        字符串  产品标题（型号建议放这里，如 "Epson TM-T88VI Receipt Printer"）
  *   brand       字符串  必须与 data.js 中 BRANDS 的 id 一致（如 'verifone'）
  *   category    字符串  必须与 data.js 中 CATEGORIES 的 id 一致（如 'pos-terminals'）
- *   subcategory 字符串  可选，CATEGORIES 里对应的 children id（如 'all-in-one-pos'）
+ *   subcategory 字符串  可选，CATEGORIES 里对应的 children id（如 'payment-terminals'）
  *   model       字符串  型号，显示在标题下方
  *   sku         字符串  内部货号 / 制造商料号（如 'M349A'）
  *   stock       'in-stock' | 'low-stock' | 'pre-order' | 'out-of-stock'
@@ -31,17 +31,18 @@
 
 const PRODUCTS = [
 
-  /* ---------------------------------------------- POS Terminals（整机） */
+  /* ------------------------------------------- POS Terminals */
+  /*   android-terminals · payment-terminals · cash-register · pdas */
 
-  /* ---------------------------------------------- Receipt Printers */
+  /* ------------------------------------------- Printers */
+  /*   portable-bluetooth-printers · desktop-receipt-printers · mobile-label-printers */
 
-  /* ---------------------------------------------- Barcode Label Printers */
+  /* ------------------------------------------- Scanners */
+  /*   handheld-barcode-scanners · presentation-scanners */
 
-  /* ---------------------------------------------- Barcode Scanners */
-
-  /* ---------------------------------------------- Cash Drawers */
-
-  /* ---------------------------------------------- Peripherals */
+  /* ------------------------------------------- Accessories */
+  /*   screens · boards · printer-mechanisms · batteries · keypads */
+  /*   housing-covers · ics · chargers · paper-rolls */
 
   /* ==========================================================================
    * 以下 3 条由阿里店铺（Guangzhou Mingheng Technology）商品数据改写而来 —— 示范批次
@@ -57,7 +58,7 @@ const PRODUCTS = [
     name: 'Refurbished Verifone VX520 Countertop POS Terminal',
     brand: 'verifone',
     category: 'pos-terminals',
-    subcategory: 'all-in-one-pos',
+    subcategory: 'payment-terminals',
     model: 'VX520',
     sku: 'VX520-LAN',
     stock: 'in-stock',
@@ -102,7 +103,7 @@ const PRODUCTS = [
     name: 'Refurbished Verifone VX675 3G Handheld POS Terminal',
     brand: 'verifone',
     category: 'pos-terminals',
-    subcategory: 'all-in-one-pos',
+    subcategory: 'payment-terminals',
     model: 'VX675',
     sku: 'VX675-3G',
     stock: 'in-stock',
@@ -146,7 +147,7 @@ const PRODUCTS = [
     name: 'Refurbished Newland ME31 GPRS POS Terminal',
     brand: 'newland',
     category: 'pos-terminals',
-    subcategory: 'all-in-one-pos',
+    subcategory: 'payment-terminals',
     model: 'ME31',
     sku: 'ME31-GPRS',
     stock: 'in-stock',

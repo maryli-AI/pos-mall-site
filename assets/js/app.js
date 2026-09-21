@@ -164,7 +164,8 @@ function toast(msg) {
 /* 顶部导航「平铺」显示 CATEGORIES 全部类目，每个类目悬停展开自己的子类目。 */
 function catPanel(c) {
   const kids = c.children || [];
-  return '<div class="nav-panel"><div class="nav-panel-inner np-cat-panel">' +
+  return '<div class="nav-panel"><div class="nav-panel-inner np-cat-panel' +
+    (kids.length > 6 ? ' np-2col' : '') + '">' +
     '<a class="np-simple-all" href="' + categoryUrl(c.id) + '">' +
       '<span>All ' + esc(c.name) + '</span><em>' + countInCategory(c.id) + '</em></a>' +
     (kids.length

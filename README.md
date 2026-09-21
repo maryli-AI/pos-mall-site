@@ -38,28 +38,31 @@ pos-mall/
 
 ```
 第一行   [Logo] ............ [搜索框] [Brands] [About] [Contact] [询价清单 (n)]
-第二行   POS Terminals · Printers · Barcode Scanners ·
-         Cash Drawers · Peripherals & Accessories ...... [All products]
+第二行   POS Terminals · Printers · Scanners · Accessories ...... [All products]
 ```
 
 第二行就是**类目平铺条**，内容完全由 `data.js` 的 `CATEGORIES` 数组顺序决定，新增/删除类目自动同步。
 每个类目悬停展开自己的子类目面板；没有子类目的类目不会出现下拉。
 
-当前共 **5 个类目**：
+当前共 **4 个类目**：
 
 | 类目 | 子类目 |
 |---|---|
-| POS Terminals | Windows / Android Terminals、All-in-One POS、Touchscreen Monitors |
-| **Printers** | Desktop Receipt、Impact & Kitchen、Portable & Bluetooth、Desktop / Industrial / Mobile Label、Panel & Embedded、Printer Mechanisms (OEM) |
-| Barcode Scanners | Handheld / Presentation / Wireless Scanners |
-| Cash Drawers | Printer-Driven、Standalone Drawers |
-| Peripherals & Accessories | Customer Displays、Keyboards & Scales、Cables & Adapters、Till Rolls & Ribbons、Mounts & Stands |
+| POS Terminals | Android Terminals、Payment Terminals、Cash Register、PDAs |
+| Printers | Portable Bluetooth Printers、Desktop Receipt Printers、Mobile Label Printers |
+| Scanners | Handheld Barcode Scanners、Presentation Scanners |
+| Accessories | Screens、Boards、Printer Mechanisms、Batteries、Keypads、Housing & Covers、ICs、Chargers、Paper Rolls |
 
-> **`Printers` 由原来的 `Receipt Printers` + `Barcode Label Printers` 合并而成**（2026-09-18）。
-> 二级类目参考 `m.goojprt.com.cn` 的 product 分类，但**去掉了消费类影像打印机**
-> （Photo / Camera / Ai Printer 不属于 POS 硬件），并保留了原有的 Impact & Kitchen、Industrial / Mobile Label。
+> ⚠️ **类目 id 与显示名保持一致**（`pos-terminals` / `printers` / `scanners` / `accessories`）。
+> 因为 id 会出现在 URL 里（`category.html?cat=accessories`），**改显示名时请一并改 id**，
+> 否则地址栏里会出现「菜单叫 Accessories、链接写 peripherals」的错位。
+> 旧 id 的链接不会报错 —— 会静默退回到 "All products" 页，不会白屏。
 >
-> 已按需求移除 **Kiosks & Self-Service、PDA & Tablets、POS Bundles & Systems** 三个类目。
+> 沿革：`Printers` 由 `Receipt Printers` + `Barcode Label Printers` 合并（09-18）；
+> 09-21 起 `Barcode Scanners` 更名 `Scanners`（id `barcode-scanners` → `scanners`）、
+> `Peripherals & Accessories` 更名 `Accessories`（id `peripherals` → `accessories`）、
+> 移除 `Cash Drawers`，并把 `Printer Mechanisms` 从 Printers 挪到 Accessories。
+> 子类目多于 6 项时下拉自动变两栏。
 > 类目条在窄屏会自动收窄间距；宽度 < 1100px 时整条隐藏，改用汉堡菜单。
 
 ---
@@ -74,7 +77,7 @@ pos-mall/
   name: 'Epson TM-T88VI Thermal Receipt Printer',  // 必填
   brand: 'epson',                  // 必填，取值见 data.js 的 BRANDS
   category: 'printers',            // 必填，取值见 data.js 的 CATEGORIES
-  subcategory: 'desktop-receipt-printers',         // 可选，类目子项
+  subcategory: 'payment-terminals',         // 可选，类目子项
   model: 'TM-T88VI',
   sku: 'M349A',
   stock: 'in-stock',               // in-stock | low-stock | pre-order | out-of-stock
@@ -290,7 +293,7 @@ Cloudflare 会把 `.html` 形式的地址跳转到无扩展名形式：
 
 ## 7. 信息架构参考来源
 
-- **类目导航**：参考 tills-direct.com —— POS 整机 / 打印机 / 扫描枪 / 现金抽屉 / 周边 的分类骨架。
+- **类目导航**：参考 tills-direct.com —— POS 终端 / 打印机 / 扫描枪 / 配件的分类骨架。
 - **品牌与目录组织**：参考 owlposprinters.com —— 以品牌 × 品类双维度组织（其真实在售为
   Star Micronics / Epson / Zebra 三大主力，打印类占绝对多数）。
 - 两者均为「新机 + 翻新」，本站按需求**只保留二手与翻新**，产品不做成色分级。

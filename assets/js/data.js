@@ -13,8 +13,8 @@ const SITE = {
   logoAccent: 'Mall',
   tagline: 'Wholesale Used & Refurbished POS Hardware',
   intro:
-    'Supplier of professionally reconditioned point-of-sale hardware — terminals, receipt printers, ' +
-    'barcode equipment, cash drawers and peripherals. Tested and ready to deploy. ' +
+    'Supplier of professionally reconditioned point-of-sale hardware — terminals, printers, ' +
+    'scanners, spare parts and accessories. Tested and ready to deploy. ' +
     'Hardware only. No software, no contracts.',
 
   email: 'sales@pos-mall.com',
@@ -49,7 +49,7 @@ const TRADE = {
 };
 
 /* ---------------------------------------------------------------- 类目树 */
-/* 结构参考 tills-direct.com 的 POS / 打印机 / 扫描枪 / 现金抽屉 / 周边大类。
+/* 结构参考 tills-direct.com 的 POS 终端 / 打印机 / 扫描枪 / 配件大类。
    这些类目会按数组顺序「平铺」在顶部导航条上，所以：
    - 新增类目 = 在数组里加一项，导航 / 首页 / 筛选器 / 页脚会自动同步
    - 名称越短越好看，太长会让导航条在窄屏换行                */
@@ -59,12 +59,12 @@ const CATEGORIES = [
     name: 'POS Terminals',
     short: 'Terminals',
     icon: 'terminal',
-    desc: 'All-in-one touchscreen tills, Windows and Android based, for retail and hospitality.',
+    desc: 'Android smart terminals, card payment terminals, cash registers and handheld PDAs.',
     children: [
-      { id: 'windows-terminals', name: 'Windows Terminals' },
       { id: 'android-terminals', name: 'Android Terminals' },
-      { id: 'all-in-one-pos', name: 'All-in-One POS' },
-      { id: 'touchscreen-monitors', name: 'Touchscreen Monitors' }
+      { id: 'payment-terminals', name: 'Payment Terminals' },
+      { id: 'cash-register', name: 'Cash Register' },
+      { id: 'pdas', name: 'PDAs' }
     ]
   },
   {
@@ -72,53 +72,40 @@ const CATEGORIES = [
     name: 'Printers',
     short: 'Printers',
     icon: 'printer',
-    desc: 'Receipt, label, portable, panel and OEM printer mechanisms — thermal and impact, desktop through industrial.',
+    desc: 'Portable, desktop and mobile printers for receipts and labels.',
     children: [
+      { id: 'portable-bluetooth-printers', name: 'Portable Bluetooth Printers' },
       { id: 'desktop-receipt-printers', name: 'Desktop Receipt Printers' },
-      { id: 'impact-kitchen-printers', name: 'Impact & Kitchen Printers' },
-      { id: 'portable-bluetooth-printers', name: 'Portable & Bluetooth Printers' },
-      { id: 'desktop-label-printers', name: 'Desktop Label Printers' },
-      { id: 'industrial-label-printers', name: 'Industrial Label Printers' },
-      { id: 'mobile-label-printers', name: 'Mobile Label Printers' },
-      { id: 'panel-embedded-printers', name: 'Panel & Embedded Printers' },
-      { id: 'printer-mechanisms', name: 'Printer Mechanisms (OEM)' }
+      { id: 'mobile-label-printers', name: 'Mobile Label Printers' }
     ]
   },
   {
-    id: 'barcode-scanners',
-    name: 'Barcode Scanners',
+    id: 'scanners',
+    name: 'Scanners',
     short: 'Scanners',
     icon: 'barcode',
-    desc: 'Handheld, presentation and wireless 1D/2D imagers and laser scanners.',
+    desc: 'Handheld and presentation barcode scanners for the checkout and the stockroom.',
     children: [
-      { id: 'handheld-scanners', name: 'Handheld Scanners' },
-      { id: 'presentation-scanners', name: 'Presentation Scanners' },
-      { id: 'wireless-scanners', name: 'Wireless Scanners' }
+      { id: 'handheld-barcode-scanners', name: 'Handheld Barcode Scanners' },
+      { id: 'presentation-scanners', name: 'Presentation Scanners' }
     ]
   },
   {
-    id: 'cash-drawers',
-    name: 'Cash Drawers',
-    short: 'Cash Drawers',
-    icon: 'drawer',
-    desc: 'Manual and auto-open cash drawers, printer-driven and standalone.',
-    children: [
-      { id: 'printer-driven-drawers', name: 'Printer-Driven Drawers' },
-      { id: 'standalone-drawers', name: 'Standalone Drawers' }
-    ]
-  },
-  {
-    id: 'peripherals',
-    name: 'Peripherals & Accessories',
-    short: 'Peripherals',
+    id: 'accessories',
+    name: 'Accessories',
+    short: 'Accessories',
     icon: 'peripheral',
-    desc: 'Customer displays, keyboards, scales, mounts, cables, till rolls and ribbons.',
+    desc: 'Spare parts and accessories — screens, boards, printer mechanisms, batteries, keypads, housings, ICs, chargers and paper rolls.',
     children: [
-      { id: 'customer-displays', name: 'Customer Displays' },
-      { id: 'keyboards-scales', name: 'Keyboards & Scales' },
-      { id: 'cables-adapters', name: 'Cables & Adapters' },
-      { id: 'till-rolls-ribbons', name: 'Till Rolls & Ribbons' },
-      { id: 'mounts-stands', name: 'Mounts & Stands' }
+      { id: 'screens', name: 'Screens' },
+      { id: 'boards', name: 'Boards' },
+      { id: 'printer-mechanisms', name: 'Printer Mechanisms' },
+      { id: 'batteries', name: 'Batteries' },
+      { id: 'keypads', name: 'Keypads' },
+      { id: 'housing-covers', name: 'Housing & Covers' },
+      { id: 'ics', name: 'ICs' },
+      { id: 'chargers', name: 'Chargers' },
+      { id: 'paper-rolls', name: 'Paper Rolls' }
     ]
   },
 ];

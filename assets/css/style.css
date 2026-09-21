@@ -197,6 +197,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   box-shadow: var(--shadow-lg); overflow: hidden;
 }
 .np-cat-panel { width: 320px; padding: 14px 20px 0; }
+/* 子类目较多时（如 Accessories 的 9 项）改成两栏，避免下拉过长 */
+.np-cat-panel.np-2col { width: 480px; }
+.np-cat-panel.np-2col .np-simple-links { grid-template-columns: 1fr 1fr; column-gap: 22px; }
 .np-simple-all {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   margin: 0 -10px 4px; padding: 10px; border-radius: 9px;
