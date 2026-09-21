@@ -19,7 +19,7 @@ const SITE = {
 
   email: 'sales@pos-mall.com',
   phone: '',                          // 留空则整站不显示电话（原值曾是占位假号码）
-  whatsapp: '',                          // 例：'+8613800138000'；填了才会出现 WhatsApp 入口
+  whatsapp: '+86 189 2626 8820',         // 带国家码。非数字字符会被自动剥离后生成 wa.me 链接
   hours: 'Mon – Fri, 09:00 – 18:00 (GMT+8)',
   addressLine: '',                       // 留空则整站不显示地址（原值是模板占位）
   addressCity: '',

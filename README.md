@@ -76,7 +76,7 @@ pos-mall/
 
 | 项 | 说明 |
 |---|---|
-| 渠道 | WhatsApp（`SITE.whatsapp` 有值才出现）+ Email（始终出现） |
+| 渠道 | WhatsApp `+86 189 2626 8820` + Email `sales@pos-mall.com`（WhatsApp 仅在 `SITE.whatsapp` 有值时出现） |
 | 内容 | 页脚显示 `SITE.hours`，并留一个指向 `contact.html` 的入口 |
 | 依赖 | **无第三方服务** —— 纯 JS/CSS。没有外部脚本、没有 cookie、无需同意弹窗 |
 | 交互 | 点按钮开合；`Esc` 或点击别处关闭；按钮带 `aria-expanded` / `aria-controls` |
@@ -291,7 +291,7 @@ Cloudflare 会把 `.html` 形式的地址跳转到无扩展名形式：
 
 | 位置 | 说明 |
 |---|---|
-| `data.js` → `SITE` | 邮箱 `sales@pos-mall.com` 是真实可用的；**电话 / WhatsApp / 地址目前为空**（原值是模板占位，已移除），需要时填上即自动出现 |
+| `data.js` → `SITE` | 邮箱 `sales@pos-mall.com`、WhatsApp `+86 189 2626 8820` 已配置；**电话与地址仍为空**（原值是模板占位，已移除），填上即自动出现在页脚与联系页 |
 | 页脚 / 关于页 | 公司实体信息、条款与隐私政策链接目前指向 about.html，需替换为正式页面 |
 | 询价表单 | 目前提交后调用 `mailto:` 打开本地邮件客户端。若要有真实后端，把 `app.js` 里 `renderEnquiryPage()` 的提交分支改成 `fetch('/api/enquiry', …)` 即可 |
 | `404.html` | 不用手动配置 —— `wrangler.jsonc` 里的 `assets.not_found_handling: "404-page"` 已指定用它作为错误页 |
