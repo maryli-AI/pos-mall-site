@@ -1,9 +1,11 @@
-/* ============================================================================
- * pos-mall.com — 产品数据（★ 你后续主要填充这个文件 ★）
- * ----------------------------------------------------------------------------
- * 目前只有 3 条真实产品（2026-09-18 从阿里店铺迁入）。原本用于跑通结构的
- * 17 条示例占位数据已移除；新增产品时直接往数组里加对象即可，不需要改动其它文件。
- *
+  /* ============================================================================
+   * pos-mall.com — 产品数据（★ 你后续主要填充这个文件 ★）
+   * ----------------------------------------------------------------------------
+   * 目前 5 条真实产品：
+   *   2026-09-18  从自有阿里店铺迁入 3 条（Verifone VX520 / VX675、Newland ME31）
+   *   2026-09-23  新增 2 条 SUNMI V2 Pro（标准版 / Label 标签版），店主自有实拍
+   * 新增产品时直接往数组里加对象即可，不需要改动其它文件。
+   *
  * 字段说明（只有 id / name / brand / category 是必填，其余可省略）：
  *
  *   id          字符串  唯一标识，用作产品页链接 ?id=xxx，建议用英文小写加连字符
@@ -33,6 +35,139 @@ const PRODUCTS = [
 
   /* ------------------------------------------- POS Terminals */
   /*   android-terminals · payment-terminals · cash-register · pdas */
+
+  /* --------------------------------------------------------------------------
+   * SUNMI V2 Pro —— 两个版本做成两条产品（店主 2026-09-23 决定）
+   *   参数来源：https://www.sunmi.us/v2-pro/（官方规格表）
+   *   图片：店主自有实拍，白底，已处理至 assets/img/products/
+   *   两版外观基本一致（差别在扫描引擎与走纸路径，属内部差异），
+   *   因此共用同一组图片。Label 版后续会补「打标签」的实拍。
+   *   归类 android-terminals —— 两台都是 Android 手持智能终端。
+   * ------------------------------------------------------------------------ */
+
+  {
+    id: 'sunmi-v2-pro-handheld-terminal',
+    name: 'Refurbished Sunmi V2 Pro Handheld Android POS Terminal',
+    brand: 'sunmi',
+    category: 'pos-terminals',
+    subcategory: 'android-terminals',
+    model: 'V2 Pro',
+    sku: 'V2 PRO',
+    stock: 'in-stock',
+    price: null,
+    image: 'assets/img/products/sunmi-v2-pro-1.jpg',
+    gallery: [
+      'assets/img/products/sunmi-v2-pro-2.jpg',
+      'assets/img/products/sunmi-v2-pro-3.jpg',
+      'assets/img/products/sunmi-v2-pro-4.jpg'
+    ],
+    shortDesc: 'Android handheld that takes orders, reads cards and prints the receipt from one device — a 5.99" screen with a built-in 58mm thermal printer.',
+    description:
+      'A handheld Android terminal that covers three jobs at once: taking the order, reading the card and printing the receipt. The 5.99" HD+ touchscreen runs Android, so ordering, queue and payment apps install directly onto the unit, and the built-in 58mm thermal printer produces the receipt at 70mm per second — no second device on the counter.\n' +
+      'The radio set is the reason this model suits sites without dependable fixed-line internet: 4G alongside dual-band Wi-Fi, with GPS, Glonass and Beidou for location. The NFC reader handles contactless cards, loyalty and stored-value schemes. The 2580mAh battery is sized to cover a trading shift rather than a few hours.\n' +
+      'The scanner reads 1D barcodes. If you also need 2D codes, or need to print labels as well as receipts, the V2 Pro Label Version is the same body with a 2D scan engine and a dual receipt/label paper path.\n' +
+      'Each unit is stripped, cleaned and functionally tested in our workshop: touchscreen, printer, scanner, NFC reader, radios and charging are all verified before dispatch. Supplied with a tested power supply. Sold as a working unit. Cosmetic wear varies between individual units — ask us for photographs of current stock if appearance matters. No POS application or payment software is included; we supply hardware only.',
+    specs: [
+      { label: 'Operating System', value: 'Android with SUNMI OS' },
+      { label: 'Processor', value: 'Cortex-A53 quad-core 1.4GHz' },
+      { label: 'Memory', value: '2GB RAM + 16GB ROM' },
+      { label: 'Display', value: '5.99" HD+ 1440 x 720, capacitive multitouch' },
+      { label: 'Barcode Scanning', value: '1D scan engine' },
+      { label: 'Rear Camera', value: '5MP autofocus with flashlight' },
+      { label: 'Printer', value: 'Built-in 58mm thermal' },
+      { label: 'Print Speed', value: '70mm/s' },
+      { label: 'Paper Roll', value: 'Up to 40mm diameter' },
+      { label: 'NFC Reader', value: 'Type A&B, Mifare, Felica (ISO/IEC 14443, ISO15693)' },
+      { label: 'Card Slots', value: '1 x PSAM, 1 x MINI SIM' },
+      { label: 'Cellular', value: '2G / 3G / 4G' },
+      { label: 'Wi-Fi', value: '2.4GHz / 5GHz (IEEE 802.11 a/b/g/n)' },
+      { label: 'Bluetooth', value: '2.1 / 3.0 / 4.2 with BLE' },
+      { label: 'Positioning', value: 'GPS, Glonass, Beidou, AGPS' },
+      { label: 'Ports', value: '1 x USB Type-C with OTG' },
+      { label: 'Battery', value: '7.6V / 2580mAh, non-removable' },
+      { label: 'Power Adapter', value: 'AC 100-240V in, DC 5V/2A out' },
+      { label: 'Dimensions', value: '215.2 x 83 x 17mm' },
+      { label: 'Weight', value: '356g' },
+      { label: 'Operating Temperature', value: '-10C to 50C' },
+      { label: 'Optional Accessory', value: 'USB cradle (charging and USB port)' }
+    ],
+    features: [
+      'Android handheld with a built-in 58mm receipt printer',
+      '5.99" HD+ screen, large enough for order and payment apps',
+      '4G plus dual-band Wi-Fi for sites without fixed-line internet',
+      'NFC reader for contactless cards and loyalty schemes',
+      '1D barcode scan engine built in',
+      '2580mAh battery sized for a full trading shift',
+      'Stripped, cleaned and functionally tested before dispatch'
+    ],
+    boxContents: ['Terminal unit', 'Tested power supply'],
+    warranty: '',
+    featured: false,
+    tags: ['android', 'handheld', 'receipt printer', 'nfc', '4g']
+  },
+
+  {
+    id: 'sunmi-v2-pro-label-version-handheld-terminal',
+    name: 'Refurbished Sunmi V2 Pro Label Version Handheld Android POS Terminal',
+    brand: 'sunmi',
+    category: 'pos-terminals',
+    subcategory: 'android-terminals',
+    model: 'V2 Pro Label Version',
+    sku: 'V2 PRO LABEL',
+    stock: 'in-stock',
+    price: null,
+    image: 'assets/img/products/sunmi-v2-pro-1.jpg',
+    gallery: [
+      'assets/img/products/sunmi-v2-pro-2.jpg',
+      'assets/img/products/sunmi-v2-pro-3.jpg',
+      'assets/img/products/sunmi-v2-pro-4.jpg'
+    ],
+    shortDesc: 'Same handheld Android terminal, but it prints labels as well as receipts and scans 2D codes — one device for the counter and the shelf.',
+    description:
+      'The Label Version is the same handheld Android terminal as the standard V2 Pro, with two changes that matter in use: the built-in 58mm printer switches between receipt and label mode, and the scan engine reads 2D codes as well as 1D barcodes.\n' +
+      'That combination removes a separate label printer from the till. Shelf-edge labels, price tags and product stickers come out of the same unit that takes the order and prints the receipt, and the angled paper path is shaped to reduce label jams during a busy period — the usual weak point when label stock is fed through a receipt mechanism.\n' +
+      'The 2D engine is the more practical of the two scanners if your stock carries QR codes, DataMatrix codes or codes that have been scuffed, scratched or reprinted, since a 2D engine recovers barcodes a 1D laser would miss.\n' +
+      'Everything else matches the standard model: 5.99" HD+ Android touchscreen, 4G with dual-band Wi-Fi, NFC reader, 2580mAh battery. Each unit is stripped, cleaned and functionally tested in our workshop, including both print modes, before dispatch. Supplied with a tested power supply. Sold as a working unit. Cosmetic wear varies between individual units — ask us for photographs of current stock if appearance matters. No POS application is included; we supply hardware only.',
+    specs: [
+      { label: 'Operating System', value: 'Android with SUNMI OS' },
+      { label: 'Processor', value: 'Cortex-A53 quad-core 1.4GHz' },
+      { label: 'Memory', value: '2GB RAM + 16GB ROM' },
+      { label: 'Display', value: '5.99" HD+ 1440 x 720, capacitive multitouch' },
+      { label: 'Barcode Scanning', value: '2D scan engine' },
+      { label: 'Rear Camera', value: '5MP autofocus with flashlight' },
+      { label: 'Printer', value: 'Built-in 58mm thermal, receipt and label modes' },
+      { label: 'Print Speed', value: '70mm/s in both receipt and label mode' },
+      { label: 'Paper Roll', value: 'Up to 40mm diameter' },
+      { label: 'Label Paper', value: '50-58mm wide, 20mm high minimum, 2mm gap' },
+      { label: 'Paper Path', value: 'Angled path for label stock' },
+      { label: 'NFC Reader', value: 'Type A&B, Mifare, Felica (ISO/IEC 14443, ISO15693)' },
+      { label: 'Card Slots', value: '1 x PSAM, 1 x MINI SIM' },
+      { label: 'Cellular', value: '2G / 3G / 4G' },
+      { label: 'Wi-Fi', value: '2.4GHz / 5GHz (IEEE 802.11 a/b/g/n)' },
+      { label: 'Bluetooth', value: '2.1 / 3.0 / 4.2 with BLE' },
+      { label: 'Positioning', value: 'GPS, Glonass, Beidou, AGPS' },
+      { label: 'Ports', value: '1 x USB Type-C with OTG' },
+      { label: 'Battery', value: '7.6V / 2580mAh, non-removable' },
+      { label: 'Power Adapter', value: 'AC 100-240V in, DC 5V/2A out' },
+      { label: 'Dimensions', value: '215.2 x 83 x 17mm' },
+      { label: 'Weight', value: '356g' },
+      { label: 'Operating Temperature', value: '-10C to 50C' },
+      { label: 'Optional Accessory', value: 'USB cradle (charging and USB port)' }
+    ],
+    features: [
+      'Prints both receipts and labels from one 58mm paper path',
+      'Angled paper path designed to reduce label jams',
+      '2D scan engine reads QR, DataMatrix and worn or damaged codes',
+      'Android handheld with a 5.99" HD+ touchscreen',
+      '4G plus dual-band Wi-Fi, and an NFC reader for contactless cards',
+      'Both print modes tested before dispatch',
+      'Replaces a separate label printer at the till'
+    ],
+    boxContents: ['Terminal unit', 'Tested power supply'],
+    warranty: '',
+    featured: false,
+    tags: ['android', 'handheld', 'label printer', 'receipt printer', '2d scanner', 'nfc']
+  },
 
   /* ------------------------------------------- Printers */
   /*   portable-bluetooth-printers · desktop-receipt-printers · mobile-label-printers */
