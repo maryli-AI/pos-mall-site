@@ -419,7 +419,14 @@ a.crumb:hover { color: var(--blue-dk); }
 
 /* ------------------------------------------------------------ 产品详情 */
 .pd-layout { display: grid; grid-template-columns: 1.05fr 1fr; gap: 44px; padding: 34px 0 46px; align-items: start; }
-.pd-gallery { position: sticky; top: 124px; }
+/* 画廊**不能**用 position: sticky。
+   详情页的第三块 `.pd-tabs`（Description / Specifications）是 grid-column: 1/-1，
+   落在第二行 —— 也就是画廊的正下方。实测画廊会脱离所在网格行继续下移，
+   而被钉住的元素形成一个层叠上下文、绘制在后面的静态内容之上，
+   于是主图和缩略图会一直盖住参数表（2026-09-23 店主报的 bug）。
+   这里退回普通文档流：画廊只有 500 多像素高，右栏也差不多高，
+   吸顶本来带不来多少收益，却会稳定地压住下面的内容。 */
+.pd-gallery { position: relative; }
 .pd-main-media { position: relative; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
 .pd-main-media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
 .pd-thumbs { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
@@ -609,7 +616,6 @@ a.crumb:hover { color: var(--blue-dk); }
   .filters { position: static; }
   .cat-layout { grid-template-columns: 1fr; }
   .pd-layout { grid-template-columns: 1fr; gap: 32px; }
-  .pd-gallery { position: static; }
   .enq-layout { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
