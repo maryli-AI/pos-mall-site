@@ -89,6 +89,61 @@ function whatsappUrl() {
   return 'https://wa.me/' + n + '?text=' +
     encodeURIComponent('Hello, I would like a quotation for POS hardware.');
 }
+
+/* ------------------------------------------------- 联系信息（唯一数据源） */
+/* 页脚、联系页都从这里生成，不再把邮箱/电话/地址写死在 HTML 里 —— 之前
+   contact.html 里硬编码过模板假电话和假地址，改配置删不掉，就是这个问题。
+   留空的字段自动跳过，所以 SITE 里填上就会全站出现。 */
+function contactEntries() {
+  const out = [];
+  if (SITE.email) out.push({
+    icon: 'mail', label: 'Email', body: '<a href="mailto:' + esc(SITE.email) + '">' + esc(SITE.email) + '</a>'
+  });
+  if (SITE.phone) out.push({
+    icon: 'phone', label: 'Phone', body: '<span>' + esc(SITE.phone) + '</span>'
+  });
+  if (whatsappUrl()) out.push({
+    icon: 'chat', label: 'WhatsApp',
+    body: '<a href="' + whatsappUrl() + '" target="_blank" rel="noopener">' + esc(SITE.whatsapp) + '</a>',
+    foot: '<a href="' + whatsappUrl() + '" target="_blank" rel="noopener">WhatsApp ' + esc(SITE.whatsapp) + '</a>'
+  });
+  const addr = [SITE.addressLine, SITE.addressCity].filter(Boolean).join(', ');
+  if (addr) out.push({ icon: 'pin', label: 'Address', body: '<span>' + esc(addr) + '</span>' });
+  if (SITE.hours) out.push({
+    icon: 'clock', label: 'Opening hours', body: '<span>' + esc(SITE.hours) + '</span>'
+  });
+  return out;
+}
+
+/* 页脚：带图标的一行一项 */
+function footerContactList() {
+  return '<ul class="footer-contact">' + contactEntries().map(e =>
+    '<li>' + icon(e.icon, 15) + (e.foot || e.body) + '</li>').join('') + '</ul>';
+}
+
+/* 联系页侧栏：图标 + 标签 + 值 */
+function contactInfoRows() {
+  return contactEntries().map(e =>
+    '<div class="info-row">' +
+      '<span class="info-icon">' + icon(e.icon, 18) + '</span>' +
+      '<div><b>' + esc(e.label) + '</b>' + e.body + '</div>' +
+    '</div>').join('');
+}
+
+/* 把 HTML 里预留的占位换成配置值：
+   - #contact-info  联系页的信息列表
+   - .js-mailto     "邮件客户端没打开就写给这个地址" 那几处兜底链接
+   这两个页面上原本是硬编码的，改邮箱要记得改多处，很容易漏。 */
+function applyContactConfig() {
+  const box = $('#contact-info');
+  if (box) box.innerHTML = contactInfoRows();
+  document.querySelectorAll('.js-mailto').forEach(a => {
+    if (!SITE.email) return;          // 没配邮箱就不填，保持惰性，不删任何节点
+    a.setAttribute('href', 'mailto:' + SITE.email);
+    a.textContent = SITE.email;
+  });
+}
+
 function countInCategory(catId, subId) {
   return PRODUCTS.filter(p => p.category === catId && (!subId || p.subcategory === subId)).length;
 }
@@ -285,15 +340,7 @@ function renderFooter() {
           '<span class="logo-text"><b>' + esc(SITE.logoText) + '</b>' + esc(SITE.logoAccent) + '<i>.' + esc(SITE.domain.split('.').pop()) + '</i></span>' +
         '</a>' +
         '<p>' + esc(SITE.footerNote) + '</p>' +
-        '<ul class="footer-contact">' +
-          '<li>' + icon('mail', 15) + '<a href="mailto:' + esc(SITE.email) + '">' + esc(SITE.email) + '</a></li>' +
-          (SITE.phone ? '<li>' + icon('phone', 15) + '<span>' + esc(SITE.phone) + '</span></li>' : '') +
-          (whatsappUrl() ? '<li>' + icon('chat', 15) + '<a href="' + whatsappUrl() + '" target="_blank" rel="noopener">WhatsApp ' + esc(SITE.whatsapp) + '</a></li>' : '') +
-          ((SITE.addressLine || SITE.addressCity)
-            ? '<li>' + icon('pin', 15) + '<span>' + esc([SITE.addressLine, SITE.addressCity].filter(Boolean).join(', ')) + '</span></li>'
-            : '') +
-          '<li>' + icon('clock', 15) + '<span>' + esc(SITE.hours) + '</span></li>' +
-        '</ul>' +
+        footerContactList() +
       '</div>' +
 
       '<div class="footer-col"><h4 class="footer-title">Categories</h4><ul class="footer-links">' +
@@ -982,6 +1029,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFooter();
   bindGlobal();
   renderContactDock();
+  applyContactConfig();
   syncEnquiryBadge();
 
   const page = document.body.getAttribute('data-page');

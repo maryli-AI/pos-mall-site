@@ -152,6 +152,18 @@ pos-mall/
 `data.js` 顶部的 `SITE`（站名、邮箱、电话、WhatsApp、地址、工作时间、货币）和 `TRADE`（质保、付款、运输等全站文案）。
 > `phone` / `whatsapp` / `addressLine` / `addressCity` **留空即不渲染** —— 页头、页脚、浮动联系窗都会自动跳过。
 
+**联系信息只有 `SITE` 一个来源。** 页脚、联系页侧栏的「Sales desk」列表、以及浮动联系窗都由
+`app.js` 的 `contactEntries()` 生成，HTML 里**不再硬编码**邮箱 / 工时 / 地址：
+
+| 位置 | 怎么来的 |
+|---|---|
+| 页脚 | `footerContactList()` |
+| 联系页侧栏列表 | `contactInfoRows()` → 填进 `contact.html` 里的 `<div id="contact-info">` |
+| 「邮件客户端没打开就写信给我们」那两句 | `<a class="js-mailto">`，由 `applyContactConfig()` 填上地址与 `mailto:` |
+
+> 2026-09-23 之前这几处是写死在 HTML 里的，所以曾经在线上残留过模板假电话和假地址
+> （改 `data.js` 删不掉）。现在**改邮箱只需改 `SITE.email` 一处**，全站同步。
+
 ---
 
 ## 3.1 从阿里店铺迁入产品（自有店铺）
